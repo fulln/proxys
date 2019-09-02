@@ -1,0 +1,19 @@
+mybatis:
+    mapper-locations:
+        - classpath:mapper/data1/*Mapper.xml
+        - classpath:mapper/data2/*Mapper.xml
+spring:
+    datasource:
+        data1:
+            url: jdbc:mysql://192.168.1.102:3306/api?useSSL=false
+            password: qq1203943228
+            username: root
+            driver-class-name: com.mysql.cj.jdbc.Driver
+        data2:
+            url: jdbc:mysql://192.168.1.102:3306/api?useSSL=false
+            password: qq1203943228
+            username: root
+            driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+    port: 8080
