@@ -22,9 +22,8 @@ import static com.fulln.proxys.config.DBBConfig.buildSqlSessionFactory;
  */
 @Slf4j
 @Configuration
-@MapperScan(basePackages = {"com.fulln.proxyx.dao.basic"},sqlSessionFactoryRef = "sqlSessionFactory1")
+@MapperScan(basePackages = {"com.fulln.proxys.dao.basic"},sqlSessionFactoryRef = "sqlSessionFactory1")
 public class DBAConfig {
-
     @Autowired
     private MybatisProperties mybatisProperties;
 
@@ -32,15 +31,15 @@ public class DBAConfig {
      * application.properteis中对应属性的前缀
      */
     @Bean(name = "db1")
-    @ConfigurationProperties(prefix = "spring.datasource.data2")
+    @ConfigurationProperties(prefix = "spring.datasource.data1")
     public DataSource dataSource2() {
         return new HikariDataSource();
     }
 
 
     @Bean(name = "sqlSessionFactory1")
-    public SqlSessionFactory sqlSessionFactory2(@Qualifier("db1")DataSource db2) throws Exception {
-        return buildSqlSessionFactory(db2,mybatisProperties.getMapperLocations()[1]);
+    public SqlSessionFactory sqlSessionFactory2(@Qualifier("db1")DataSource db1) throws Exception {
+        return buildSqlSessionFactory(db1,mybatisProperties.getMapperLocations()[1]);
     }
 
     @Bean(name = "TransactionManager1")

@@ -41,7 +41,7 @@ public class DBBConfig {
      */
     @Bean(name = "db2")
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.data1")
+    @ConfigurationProperties(prefix = "spring.datasource.data2")
     public DataSource dataSource2() {
         return new HikariDataSource();
     }
