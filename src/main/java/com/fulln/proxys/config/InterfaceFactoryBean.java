@@ -11,8 +11,8 @@ public class InterfaceFactoryBean<T> implements FactoryBean {
 	public Object getObject() throws Exception {
 
 		// 检查 h 不为空，否则抛异常
-		Objects.requireNonNull(interfaceClass);
-		return (T) Enhancer.create(interfaceClass,new DymicInvocationHandler());
+		Objects.requireNonNull();
+		return (T) Enhancer.create(,new DymicInvocationHandler());
 	}
 
 	@Override

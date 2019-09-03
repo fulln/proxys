@@ -13,10 +13,13 @@ import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
 public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
+
+	private static final HashMap UNDERLYING_MAPPING = new HashMap();
 
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
@@ -60,7 +63,7 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 	}
 	public void registerBeanDefinitions(List<Class<?>> internalClasses, BeanDefinitionRegistry registry){
 		for (Class<?> clazz : internalClasses) {
-			if (HSF_UNDERLYING_MAPPING.values().contains(clazz)) {
+			if (UNDERLYING_MAPPING.values().contains(clazz)) {
 				log.debug("重复扫描{}类,忽略重复注册", clazz.getName());
 				continue;
 			}

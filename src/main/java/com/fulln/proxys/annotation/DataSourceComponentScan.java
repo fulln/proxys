@@ -1,6 +1,6 @@
 package com.fulln.proxys.annotation;
 
-import com.fulln.proxys.config.BeanDefinitionRegistrar;
+import com.fulln.proxys.config.HsfBeanDefinitionRegistrar;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(BeanDefinitionRegistrar.class)
+@Import(HsfBeanDefinitionRegistrar.class)
 public @interface DataSourceComponentScan {
 
 	/**
