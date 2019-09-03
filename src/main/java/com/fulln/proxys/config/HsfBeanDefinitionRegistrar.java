@@ -1,8 +1,11 @@
 package com.fulln.proxys.config;
 
-import cn.hutool.core.io.FileUtil;
+import com.fulln.proxys.annotation.DataSourceComponent;
 import com.fulln.proxys.annotation.DataSourceComponentScan;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
@@ -10,13 +13,13 @@ import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.net.URL;
 import java.util.List;
 
+@Slf4j
 public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
 	@Override
-	public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
+	public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
 		//拿到主类上的自定义注解的属性
 		AnnotationAttributes annAttr = AnnotationAttributes.fromMap(annotationMetadata.getAnnotationAttributes(DataSourceComponentScan.class.getName()));
 
@@ -41,6 +44,7 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 
 		List<TypeFilter> excludeFilters = extractTypeFilters(annAttr.getAnnotationArray("excludeFilters"));
 
+
 		List<Class<?>> candidates = scanPackages(basePackages, includeFilters, excludeFilters);
 
 		if (candidates.isEmpty()) {
@@ -54,10 +58,38 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 		registerBeanDefinitions(candidates, registry);
 
 	}
+	public void registerBeanDefinitions(List<Class<?>> internalClasses, BeanDefinitionRegistry registry){
+		for (Class<?> clazz : internalClasses) {
+			if (HSF_UNDERLYING_MAPPING.values().contains(clazz)) {
+				log.debug("重复扫描{}类,忽略重复注册", clazz.getName());
+				continue;
+			}
+			BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(clazz);
+			GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
+
+			definition.getPropertyValues().add("interfaceClass", clazz);
+
+			Enum value = clazz.getAnnotation(DataSourceComponent.class).DataSource();
+
+			definition.getPropertyValues().add("value",value);
+			definition.setBeanClass(InterfaceFactoryBean.class);
+			definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
+			if (registerSpringBean(clazz)) {
+				log.debug("注册[{}]Bean", clazz.getName());
+				registry.registerBeanDefinition(ClassUtils.getShortNameAsProperty(clazz), definition);
+			}
+			UNDERLYING_MAPPING.put(ClassUtils.getShortNameAsProperty(clazz), clazz);
+		}
+	};
+
+	private List<TypeFilter> extractTypeFilters(AnnotationAttributes[] excludeFilters) {
+		return null;
+	}
 
 	private String[] getPackagesFromClasses(Class<?>[] basePackageClasses) {
 		return null;
 
 
 	}
+
 }

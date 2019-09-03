@@ -11,7 +11,7 @@ public class HsfTypeFilter extends AbstractClassTestingTypeFilter implements Typ
 	protected boolean match(ClassMetadata classMetadata) {
 
 
-		Class<?> clazz = transformToClass(metadata.getClassName());
+		Class<?> clazz = transformToClass(classMetadata.getClassName());
 		if (clazz == null || !clazz.isAnnotationPresent(DataSourceComponent.class)) {
 			return false;
 		}
@@ -20,7 +20,7 @@ public class HsfTypeFilter extends AbstractClassTestingTypeFilter implements Typ
 			throw new IllegalStateException("类{" + clazz.getName() + "}已经标识了Spring组件注解,不能再指定[registerBean = true]");
 		}
 		//过滤抽象类,接口,注解,枚举,内部类及匿名类
-		return !metadata.isAbstract() && !clazz.isInterface() && !clazz.isAnnotation() && !clazz.isEnum()
+		return !classMetadata.isAbstract() && !clazz.isInterface() && !clazz.isAnnotation() && !clazz.isEnum()
 				&& !clazz.isMemberClass() && !clazz.getName().contains("$");
 	}
 }
