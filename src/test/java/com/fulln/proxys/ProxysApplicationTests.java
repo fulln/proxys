@@ -16,17 +16,5 @@ import java.util.List;
 @SpringBootTest
 public class ProxysApplicationTests {
 
-	@Resource
-	private Sys1PermissionDao sys1PermissionDao;
 
-	@Resource
-	private SysPermissionDao sysPermissionDao;
-
-	@Test
-	public void queryAll() {
-		List<SysPermission> sysPermissions = sys1PermissionDao.queryAll();
-		List<SysPermission> byRole = sysPermissionDao.findByRole(1);
-		System.out.println(CollectionUtil.join(sysPermissions,","));
-		System.out.println(CollectionUtil.join(byRole,","));
-	}
 }
