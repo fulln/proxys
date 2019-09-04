@@ -11,7 +11,7 @@ public class HsfTypeFilter extends AbstractClassTestingTypeFilter implements Typ
 	protected boolean match(ClassMetadata classMetadata) {
 
 
-		Class<?> clazz = transformToClass(classMetadata.getClassName());
+		Class<?> clazz = classMetadata.getClass();
 		if (clazz == null || !clazz.isAnnotationPresent(DataSourceComponent.class)) {
 			return false;
 		}
@@ -23,5 +23,10 @@ public class HsfTypeFilter extends AbstractClassTestingTypeFilter implements Typ
 		return !classMetadata.isAbstract() && !clazz.isInterface() && !clazz.isAnnotation() && !clazz.isEnum()
 				&& !clazz.isMemberClass() && !clazz.getName().contains("$");
 	}
+
+	private boolean isAnnotatedBySpring(Class<?> clazz) {
+		return false;
+	}
+
 }
 

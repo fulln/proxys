@@ -61,6 +61,11 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 		registerBeanDefinitions(candidates, registry);
 
 	}
+
+	private List<Class<?>> scanPackages(String[] basePackages, List<TypeFilter> includeFilters, List<TypeFilter> excludeFilters) {
+		return null;
+	}
+
 	public void registerBeanDefinitions(List<Class<?>> internalClasses, BeanDefinitionRegistry registry){
 		for (Class<?> clazz : internalClasses) {
 			if (UNDERLYING_MAPPING.values().contains(clazz)) {
@@ -83,7 +88,13 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 			}
 			UNDERLYING_MAPPING.put(ClassUtils.getShortNameAsProperty(clazz), clazz);
 		}
-	};
+	}
+
+	private boolean registerSpringBean(Class<?> clazz) {
+		return false;
+	}
+
+	;
 
 	private List<TypeFilter> extractTypeFilters(AnnotationAttributes[] excludeFilters) {
 		return null;

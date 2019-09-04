@@ -7,12 +7,13 @@ import java.util.Objects;
 
 public class InterfaceFactoryBean<T> implements FactoryBean {
 
+	Class<T> clazz;
+
 	@Override
 	public Object getObject() throws Exception {
-
 		// 检查 h 不为空，否则抛异常
-		Objects.requireNonNull();
-		return (T) Enhancer.create(,new DymicInvocationHandler());
+		Objects.requireNonNull(clazz);
+		return (T) Enhancer.create(clazz,new DymicInvocationHandler());
 	}
 
 	@Override
