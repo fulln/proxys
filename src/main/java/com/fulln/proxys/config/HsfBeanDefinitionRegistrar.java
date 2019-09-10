@@ -8,6 +8,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
+import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.util.ClassUtils;
@@ -20,6 +21,9 @@ import java.util.List;
 public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
 	private static final HashMap UNDERLYING_MAPPING = new HashMap();
+
+	private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
+
 
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
@@ -48,7 +52,7 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 		List<TypeFilter> excludeFilters = extractTypeFilters(annAttr.getAnnotationArray("excludeFilters"));
 
 
-		List<Class<?>> candidates = scanPackages(basePackages, includeFilters, excludeFilters);
+		List<Class<?>> candidates = scanPackages( includeFilters, excludeFilters,basePackages);
 
 		if (candidates.isEmpty()) {
 			log.info("扫描指定包[{}]时未发现复合条件的类", basePackages.toString());
@@ -62,9 +66,45 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 
 	}
 
-	private List<Class<?>> scanPackages(String[] basePackages, List<TypeFilter> includeFilters, List<TypeFilter> excludeFilters) {
+	private List<Class<?>> scanPackages( List<TypeFilter> includeFilters, List<TypeFilter> excludeFilters,String... basePackages) {
+
+//		org.springframework.hibernate5.LocalSessionFactoryBuilder.scanPackages();
+
+//		Set<Class<?>> set = new LinkedHashSet<>();
+//			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
+//					resolveBasePackage(basePackages[0]) + '/' + DEFAULT_RESOURCE_PATTERN;
+//			try {
+//				Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
+//				for (Resource resource : resources) {
+//					if (resource.isReadable()) {
+//						MetadataReader metadataReader = this.metadataReaderFactory.getMetadataReader(resource);
+//						String className = metadataReader.getClassMetadata().getClassName();
+//						Class<?> clazz;
+//						try {
+//							clazz = Class.forName(className);
+//							set.add(clazz);
+//						} catch (ClassNotFoundException e) {
+//							e.printStackTrace();
+//						}
+//					}
+//				}
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			return new ArrayList<>(set);
 		return null;
+
 	}
+
+	protected String resolveBasePackage(String basePackage) {
+		return ClassUtils.convertClassNameToResourcePath(this.getEnvironment().resolveRequiredPlaceholders(basePackage));
+	}
+
+	private Environment getEnvironment() {
+//		return applicationContext.getEnvironment();
+		return  null;
+	}
+
 
 	public void registerBeanDefinitions(List<Class<?>> internalClasses, BeanDefinitionRegistry registry){
 		for (Class<?> clazz : internalClasses) {
