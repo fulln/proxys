@@ -6,16 +6,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.TypeFilter;
+import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
@@ -64,6 +66,29 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 		//注册
 		registerBeanDefinitions(candidates, registry);
 
+	}
+
+	private Set<String> getPackagesToScan(AnnotationMetadata metadata) {
+		AnnotationAttributes attributes = AnnotationAttributes.fromMap(metadata.getAnnotationAttributes(EntityScan.class.getName()));
+		String[] basePackages = attributes.getStringArray("basePackages");
+		Class<?>[] basePackageClasses = attributes.getClassArray("basePackageClasses");
+		Set<String> packagesToScan = new LinkedHashSet();
+		packagesToScan.addAll(Arrays.asList(basePackages));
+		Class[] var6 = basePackageClasses;
+		int var7 = basePackageClasses.length;
+
+		for(int var8 = 0; var8 < var7; ++var8) {
+			Class<?> basePackageClass = var6[var8];
+			packagesToScan.add(ClassUtils.getPackageName(basePackageClass));
+		}
+
+		if (packagesToScan.isEmpty()) {
+			String packageName = ClassUtils.getPackageName(metadata.getClassName());
+			Assert.state(!StringUtils.isEmpty(packageName), "@EntityScan cannot be used with the default package");
+			return Collections.singleton(packageName);
+		} else {
+			return packagesToScan;
+		}
 	}
 
 	private List<Class<?>> scanPackages( List<TypeFilter> includeFilters, List<TypeFilter> excludeFilters,String... basePackages) {
