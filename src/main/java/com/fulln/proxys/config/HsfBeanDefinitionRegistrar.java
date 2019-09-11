@@ -11,7 +11,6 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -191,14 +190,15 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 	}
 
 
-	protected String resolveBasePackage(String basePackage) {
-		return ClassUtils.convertClassNameToResourcePath(this.getEnvironment().resolveRequiredPlaceholders(basePackage));
-	}
-
-	private Environment getEnvironment() {
+//	protected String resolveBasePackage(String basePackage) {
+//		return ClassUtils.convertClassNameToResourcePath(this.getEnvironment().resolveRequiredPlaceholders(basePackage));
+//	}
+//
+//	private Environment getEnvironment() {
 //		return applicationContext.getEnvironment();
-		return  null;
-	}
+//	}
+
+
 
 
 	public void registerBeanDefinitions(List<Class<?>> internalClasses, BeanDefinitionRegistry registry){
