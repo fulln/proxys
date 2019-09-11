@@ -3,9 +3,10 @@ package com.fulln.proxys.assis.handle;
 
 import cn.hutool.json.JSONUtil;
 import org.springframework.cglib.proxy.InvocationHandler;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.lang.reflect.Method;
-
+@ComponentScan
 public class ServiceProxy<T> implements InvocationHandler {
  
     private Class<T> interfaceType;

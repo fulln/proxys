@@ -1,9 +1,14 @@
 package com.fulln.proxys.config;
 
 import com.fulln.proxys.annotation.DataSourceComponent;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.filter.AbstractClassTestingTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 public class HsfTypeFilter extends AbstractClassTestingTypeFilter implements TypeFilter {
 
@@ -24,9 +29,14 @@ public class HsfTypeFilter extends AbstractClassTestingTypeFilter implements Typ
 				&& !clazz.isMemberClass() && !clazz.getName().contains("$");
 	}
 
+	/**
+	 * @param clazz
+	 * @return
+	 */
 	private boolean isAnnotatedBySpring(Class<?> clazz) {
-		return false;
+		return clazz.isAnnotationPresent(Component.class) || clazz.isAnnotationPresent(Configuration.class)
+				|| clazz.isAnnotationPresent(Service.class) || clazz.isAnnotationPresent(Repository.class)
+				|| clazz.isAnnotationPresent(Controller.class);
 	}
-
 }
 
