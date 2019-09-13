@@ -16,6 +16,9 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Import(HsfBeanDefinitionRegistrar.class)
+/**
+ * import  传入的3种方法
+ */
 public @interface DataSourceComponentScan {
 
 	/**

@@ -43,8 +43,12 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 	private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
 
 
-
-
+	/**
+	 *
+	 * @param annotationMetadata 当前类的注解信息
+	 * @param registry bean定义的注册类
+	 *            吧所有需要添加到容器中的bean，调用下面的方法。
+	 */
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
 		//拿到主类上的自定义注解的属性

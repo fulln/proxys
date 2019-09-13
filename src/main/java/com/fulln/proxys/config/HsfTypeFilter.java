@@ -1,22 +1,23 @@
 package com.fulln.proxys.config;
 
 import com.fulln.proxys.annotation.DataSourceComponent;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.filter.AbstractClassTestingTypeFilter;
-import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
-public class HsfTypeFilter extends AbstractClassTestingTypeFilter implements TypeFilter {
+import org.springframework.util.ClassUtils;
+@Slf4j
+public class HsfTypeFilter extends AbstractClassTestingTypeFilter{
 
 	@Override
 	protected boolean match(ClassMetadata classMetadata) {
 
 
-		Class<?> clazz = classMetadata.getClass();
+		Class<?> clazz = transformToClass(classMetadata.getClassName());
 		if (clazz == null || !clazz.isAnnotationPresent(DataSourceComponent.class)) {
 			return false;
 		}
@@ -29,6 +30,20 @@ public class HsfTypeFilter extends AbstractClassTestingTypeFilter implements Typ
 				&& !clazz.isMemberClass() && !clazz.getName().contains("$");
 	}
 
+
+	/**
+	 * @param className
+	 * @return
+	 */
+	private Class<?> transformToClass(String className) {
+		Class<?> clazz = null;
+		try {
+			clazz = ClassUtils.forName(className, this.getClass().getClassLoader());
+		} catch (ClassNotFoundException e) {
+			log.info("未找到指定HSF基础类{}", className);
+		}
+		return clazz;
+	}
 	/**
 	 * @param clazz
 	 * @return
