@@ -11,24 +11,6 @@ import org.springframework.context.annotation.Configuration;
  * bean 生命周期
  *   init 和  destroy
  *
- *
- *
- *
- *          if (mbd == null || !mbd.isSynthetic()) {
- *             wrappedBean = this.applyBeanPostProcessorsBeforeInitialization(bean, beanName);
- *         }
- *
- *         try {
- *             this.invokeInitMethods(beanName, wrappedBean, mbd);
- *         } catch (Throwable var6) {
- *             throw new BeanCreationException(mbd != null ? mbd.getResourceDescription() : null, beanName, "Invocation of init method failed", var6);
- *         }
- *
- *         if (mbd == null || !mbd.isSynthetic()) {
- *             wrappedBean = this.applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
- *         }
- *
- *
  * 1。 指定@Bean initmethod
  * 2.  实现 initializingBean 和  disposableBean 指定bean的启动方法和销毁方法
  * 3.  使用JSR250
