@@ -32,6 +32,7 @@ import org.springframework.context.annotation.Configuration;
  *  *         if (mbd == null || !mbd.isSynthetic()) {
  *  *             wrappedBean = this.applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
  *  *         }
+ * spring 底层对 beanProcessor 使用
  *
  *
  * @date  Created in  21:22  2019-09-13.
