@@ -104,6 +104,20 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  *            JdkDynamicAopProxy
  *          4。给容器中返回当前组件使用的cglib代理对象
  *          5。以后容器中获得到的就是这个代理对象，执行目标方法的时候，就会执行通知方法的流程
+ *
+ *         3.目标方法执行
+ *         容器中保存了代理对象，这个对象中保存了完成的容器信息 ，
+ *          1。  进入了  org.springframework.aop.framework.CglibAopProxy.DynamicAdvisedInterceptor#intercept 这个方法里面
+ *            开始拦截方法
+ *          2。根据proxyFactory
+ *            List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
+ *            获取拦截器链
+ *              1. List<Object> interceptorList 创建这个对象去保存所有的拦截器
+ *              2。 遍历所有的增强器，转为Interceptor[]
+ *              3.将增强器转为List<MethodInterceptor>
+            3。如果没有拦截器链，直接执行目标的方法（拦截器链，每一个通知方法被包装为拦截器，后每一个方法的执行都是使用的methodIntercepter拦截器进行执行）
+			4。如果有拦截器链，吧需要执行的信息，创建cglibMethodInvocation#proceed
+			5  如果没有拦截器，或者执行到最后一个拦截器，执行目标的方法
 
  *
  *
