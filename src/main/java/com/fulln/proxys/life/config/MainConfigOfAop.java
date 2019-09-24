@@ -119,7 +119,25 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 			4。如果有拦截器链，吧需要执行的信息，创建cglibMethodInvocation#proceed
 			5  如果没有拦截器，或者执行到最后一个拦截器，执行目标的方法
 
- *
+ *  总流程
+ *   1,  开启@EnableAspectJAutoProxy  开启aop的功能
+ *   2,  会给容器中注册 AnnotationAwareAspectJAutoProxyCreator
+ *   3,   AnnotationAwareAspectJAutoProxyCreator 是一个后置处理器
+ *   4,  容器的处理器：
+ *      1, 调用refesh中的 registerBeanPostProcessor 来注册后置处理器，创建 AnnotationAwareAspectJAutoProxyCreator对象
+ *      2, 调用 refresh中的  finishBeanFactoryInitialization 方法 来初始化剩下的单实例bean
+ *          1，  创建业务逻辑和切面组件
+ *          2， AnnotationAwareAspectJAutoProxyCreator 拦截创建过程
+ *          3， 组件创建完之后，判断是否需要增强
+ *             是  切面里面的通知方法，包装成增强器（advisor）；给组件创建代理对象
+ *   5， 执行目标方法
+ *     1， 代理对象执行目标方法
+ *     2， CglibAopProxy.intercept();
+ *         1, 得到目标方法的拦截器链（增强器包装成拦截器）
+ *         2，利用拦截器的链式机制，依次进入每一个拦截器进行执行
+ *         3， 效果
+ *           前置 -> 目标方法 -> 后置 -> 返回通知
+ *           前置 -> 目标方法 -> 后置 -> 异常通知
  *
  *
  *

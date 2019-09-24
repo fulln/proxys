@@ -13,7 +13,6 @@ public class MainConfigOfAopTest {
 		MathCalculate bean = annotationConfigApplicationContext.getBean(MathCalculate.class);
 		bean.div(6,2);
 
-
 		annotationConfigApplicationContext.close();
 	}
 
