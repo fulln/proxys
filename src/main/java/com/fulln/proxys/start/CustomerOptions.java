@@ -34,6 +34,5 @@ public class CustomerOptions {
 		String id = cl.getOptionValue("id");
 		String mode = cl.getOptionValue("mode");
 		System.out.println(String.format("从命令行获取到的参数有 %s %s %s:",job,id,mode));
-
 	}
 }
