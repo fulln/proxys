@@ -8,17 +8,13 @@ import java.lang.annotation.*;
 
 /**
  * @author fulln
- * @description
+ * @description import  传入的3种方法
  * @date Created in  23:36  2019-09-03.
  */
-
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Import(HsfBeanDefinitionRegistrar.class)
-/**
- * import  传入的3种方法
- */
 public @interface DataSourceComponentScan {
 
 	/**

@@ -24,6 +24,8 @@ import static com.fulln.proxys.config.DBBConfig.buildSqlSessionFactory;
 @Configuration
 @MapperScan(basePackages = {"com.fulln.proxys.dao.basic"},sqlSessionFactoryRef = "sqlSessionFactory1")
 public class DBAConfig {
+
+
     @Autowired
     private MybatisProperties mybatisProperties;
 
@@ -32,13 +34,13 @@ public class DBAConfig {
      */
     @Bean(name = "db1")
     @ConfigurationProperties(prefix = "spring.datasource.data1")
-    public DataSource dataSource2() {
+    public DataSource dataSource1() {
         return new HikariDataSource();
     }
 
 
     @Bean(name = "sqlSessionFactory1")
-    public SqlSessionFactory sqlSessionFactory2(@Qualifier("db1")DataSource db1) throws Exception {
+    public SqlSessionFactory sqlSessionFactory1(@Qualifier("db1")DataSource db1) throws Exception {
         return buildSqlSessionFactory(db1,mybatisProperties.getMapperLocations()[1]);
     }
 

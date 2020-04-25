@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
+
 @Slf4j
 public class HsfTypeFilter extends AbstractClassTestingTypeFilter{
 
