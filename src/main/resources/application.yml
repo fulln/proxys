@@ -1,7 +1,6 @@
 mybatis:
     mapper-locations:
-        - classpath:mapper/data1/*Mapper.xml
-        - classpath:mapper/data2/*Mapper.xml
+        - classpath:mapper/data*/*Mapper.xml
 spring:
     datasource:
         data1:

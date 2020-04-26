@@ -23,8 +23,14 @@ public @interface EnableDynamicSource {
 	 * @return
 	 */
 	@AliasFor("value")
-	String ApplicationUrl() default  "spring.database";
+	String ApplicationUrl() default  "spring.datasource";
 
 	@AliasFor("ApplicationUrl")
-	String value() default  "spring.database";
+	String value() default  "spring.datasource";
+
+	/**
+	 * 默认连接的数据源
+	 * @return
+	 */
+	String defaultSourceName() default "";
 }

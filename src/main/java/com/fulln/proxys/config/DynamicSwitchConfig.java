@@ -1,11 +1,16 @@
 package com.fulln.proxys.config;
 
 import com.fulln.proxys.annotation.EnableDynamicSource;
-import com.fulln.proxys.dto.DynamicSourceSwitchDto;
+import com.fulln.proxys.dto.DynamicSourceSwitchProp;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
@@ -17,9 +22,10 @@ import org.springframework.util.ClassUtils;
  * @date Created in  15:30  2020-04-25.
  */
 @Slf4j
-public class DynamicSwitchConfig implements ImportBeanDefinitionRegistrar {
+public class DynamicSwitchConfig implements BeanFactoryAware, ImportBeanDefinitionRegistrar  {
 
-
+	private BeanFactory beanFactory;
+	private ApplicationContext applicationContext;
 	/**
 	 * Register bean definitions as necessary based on the given annotation metadata of
 	 * the importing {@code @Configuration} class.
@@ -37,43 +43,45 @@ public class DynamicSwitchConfig implements ImportBeanDefinitionRegistrar {
 
 
 		String applicationUrl = "spring.datasource";
+		String defaultDatasourceName = "";
 		if (annAttr != null) {
 			applicationUrl = annAttr.getString("ApplicationUrl");
+			defaultDatasourceName  = annAttr.getString("defaultSourceName");
 		}
 
 		log.info("从配置文件中获取到对应的路径:{},开始注册配置类", applicationUrl);
 
-		//直接构建一个pojo bean
-		DefaultListableBeanFactory beanFactory =
-				new DefaultListableBeanFactory();
 
-		BeanDefinitionBuilder b =
-				BeanDefinitionBuilder.rootBeanDefinition(DynamicSourceSwitchDto.class)
-						.addPropertyValue("applicationUrl", applicationUrl);
 
-		String beanName = ClassUtils.getShortNameAsProperty(DynamicSourceSwitchDto.class);
+		BeanDefinitionBuilder builder =
+				BeanDefinitionBuilder.genericBeanDefinition(DynamicSourceSwitchProp.class)
+						.addPropertyValue("applicationUrl", applicationUrl)
+						.addPropertyValue("defaultDatasourceName",defaultDatasourceName);
 
-		beanFactory.registerBeanDefinition(beanName, b.getBeanDefinition());
+		String beanName = ClassUtils.getShortNameAsProperty(DynamicSourceSwitchProp.class);
 
-		Object bean = beanFactory.getBean(beanName);
+		registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
 
-//		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(DynamicSourceSwitchDto.class);
-//
-//		builder.setScope(BeanDefinition.SCOPE_SINGLETON);
-//
-//		GenericBeanDefinition rawBeanDefinition = (GenericBeanDefinition)builder.getRawBeanDefinition();
-//
-//		rawBeanDefinition.getPropertyValues().add("applicationUrl",applicationUrl);
-//
-//		rawBeanDefinition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
-//
-//		rawBeanDefinition.setBeanClass(DynamicSourceSwitchDto.class);
-//		//注册bean
-//		registry.registerBeanDefinition(ClassUtils.getShortNameAsProperty(DynamicSourceSwitchDto.class),rawBeanDefinition);
 
-		log.info("注册单例bean:{}",beanName);
+		log.info("注册bean:{},检查是否成功:{}",beanName,beanFactory.getBean(beanName) != null);
+
 	}
 
 
+	/**
+	 * Callback that supplies the owning factory to a bean instance.
+	 * <p>Invoked after the population of normal bean properties
+	 * but before an initialization callback such as
+	 * {@link InitializingBean#afterPropertiesSet()} or a custom init-method.
+	 *
+	 * @param beanFactory owning BeanFactory (never {@code null}).
+	 *                    The bean can immediately call methods on the factory.
+	 * @throws BeansException in case of initialization errors
+	 * @see BeanInitializationException
+	 */
+	@Override
+	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+		this.beanFactory = beanFactory;
+	}
 
 }

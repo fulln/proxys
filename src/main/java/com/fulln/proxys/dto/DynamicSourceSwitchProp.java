@@ -2,15 +2,15 @@ package com.fulln.proxys.dto;
 
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author fulln
- * @description  自定义一个class
+ * @description  自定义一个class 用于传递参数
  * @date  Created in  17:03  2020-04-25.
  */
 @Data
-public class DynamicSourceSwitchDto {
+public class DynamicSourceSwitchProp {
 
 
 	private static ThreadLocal<String> local = new ThreadLocal<>();
@@ -18,8 +18,9 @@ public class DynamicSourceSwitchDto {
 
 	private String applicationUrl;
 
+	private String defaultDatasourceName;
 
-	private List<String> databaseName;
+	private Set<String> databaseName;
 
 	/**
 	 * 设置数据源key

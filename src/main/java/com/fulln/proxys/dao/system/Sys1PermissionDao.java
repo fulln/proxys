@@ -17,6 +17,7 @@ import java.util.List;
 @Repository
 public interface Sys1PermissionDao extends BaseMapper<SysPermission> {
 
+
 	/**
 	 * @Author: fulln
 	 * @Description: 查询全部的权限
