@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * @description 数据源动态创建
  * @date Created in  14:36  2020-04-25.
  * 目前不知道怎么获取到spring的入口类，所以我想象中的根据入口类上面的注解信息有没有
- * 我自定义的注解de这个方法走不通，战术性放弃，等以后记起来是怎么获取了再来放开这个地方
+ * 我自定义的注解de这个Condition方法走不通，战术性放弃，等以后记起来是怎么获取了再来放开这个地方
  */
 @Slf4j
 //@Conditional(DynamicSwitchCondition.class)
