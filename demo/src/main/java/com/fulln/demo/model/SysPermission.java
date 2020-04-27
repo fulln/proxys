@@ -1,4 +1,4 @@
-package com.fulln.proxys.model;
+package com.fulln.demo.model;
 
 
 import com.baomidou.mybatisplus.annotation.TableId;

@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.env.OriginTrackedMapPropertySource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
@@ -30,7 +29,6 @@ import org.springframework.util.StringUtils;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,9 +37,11 @@ import java.util.stream.Collectors;
  * @author fulln
  * @description 数据源动态创建
  * @date Created in  14:36  2020-04-25.
+ * 目前不知道怎么获取到spring的入口类，所以我想象中的根据入口类上面的注解信息有没有
+ * 我自定义的注解de这个方法走不通，战术性放弃，等以后记起来是怎么获取了再来放开这个地方
  */
 @Slf4j
-@Conditional(DynamicSwitchCondition.class)
+//@Conditional(DynamicSwitchCondition.class)
 @EnableConfigurationProperties(MybatisProperties.class)
 @Configuration
 public class DatasourceConfig {
@@ -93,7 +93,7 @@ public class DatasourceConfig {
 
 		propertySources.forEach(propertySource -> {
 			if (propertySource instanceof OriginTrackedMapPropertySource) {
-				LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) propertySource.getSource();
+				Map<String, String> map = (Map<String, String>) propertySource.getSource();
 				Set<String> collect = map.keySet().stream().
 						filter(key -> key.contains(prefix)).
 						map(single -> {

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
@@ -25,7 +24,6 @@ import org.springframework.util.ClassUtils;
 public class DynamicSwitchConfig implements BeanFactoryAware, ImportBeanDefinitionRegistrar  {
 
 	private BeanFactory beanFactory;
-	private ApplicationContext applicationContext;
 	/**
 	 * Register bean definitions as necessary based on the given annotation metadata of
 	 * the importing {@code @Configuration} class.

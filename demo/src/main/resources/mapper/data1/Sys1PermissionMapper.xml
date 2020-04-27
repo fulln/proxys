@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.fulln.proxys.dao.system.Sys1PermissionDao">
+<mapper namespace="com.fulln.demo.dao.system.Sys1PermissionDao">
 
 
-    <select id="queryAll" resultType="com.fulln.proxys.model.SysPermission">
+    <select id="queryAll" resultType="com.fulln.demo.model.SysPermission">
       select  s.* from  sys_permission s where s.permission_state=1
     </select>
 

@@ -20,4 +20,9 @@ public class InterfaceFactoryBean<T> implements FactoryBean {
 	public Class<?> getObjectType() {
 		return null;
 	}
+
+	@Override
+	public boolean isSingleton() {
+		return false;
+	}
 }

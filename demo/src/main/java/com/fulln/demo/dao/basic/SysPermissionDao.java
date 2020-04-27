@@ -1,8 +1,8 @@
-package com.fulln.proxys.dao.basic;
+package com.fulln.demo.dao.basic;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.fulln.proxys.model.SysPermission;
+import com.fulln.demo.model.SysPermission;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
