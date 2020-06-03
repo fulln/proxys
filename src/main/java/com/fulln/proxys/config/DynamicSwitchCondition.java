@@ -15,11 +15,8 @@ public class DynamicSwitchCondition implements Condition {
 	@Override
 	public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
 
-
-
-
 //		ConfigurableListableBeanFactory beanFactory = conditionContext.getBeanFactory();
-//		String beanName = ClassUtils.getShortNameAsProperty(DynamicSourceSwitchProp.class);
+//		String beanName = ClassUtils.getShortNameAsProperty(DynamicSwitchConfig.class);
 //		try {
 //			if (!beanFactory.containsBean(beanName)) {
 //				return false;

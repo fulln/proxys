@@ -10,13 +10,18 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.env.OriginTrackedMapPropertySource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
@@ -41,9 +46,11 @@ import java.util.stream.Collectors;
  * 我自定义的注解de这个Condition方法走不通，战术性放弃，等以后记起来是怎么获取了再来放开这个地方
  */
 @Slf4j
-//@Conditional(DynamicSwitchCondition.class)
 @EnableConfigurationProperties(MybatisProperties.class)
 @Configuration
+@ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class})
+@EnableAspectJAutoProxy
+@Import(ScanDynamicResource.class)
 public class DatasourceConfig {
 
 	/**
@@ -79,6 +86,7 @@ public class DatasourceConfig {
 	}
 
 	@Bean
+	@SuppressWarnings("uncheck")
 	public DynamicDataSourceSwitch createDynamicDataSourceSwitch() {
 		DynamicDataSourceSwitch dynamicDataSourceSwitch = new DynamicDataSourceSwitch();
 
@@ -93,6 +101,7 @@ public class DatasourceConfig {
 
 		propertySources.forEach(propertySource -> {
 			if (propertySource instanceof OriginTrackedMapPropertySource) {
+
 				Map<String, String> map = (Map<String, String>) propertySource.getSource();
 				Set<String> collect = map.keySet().stream().
 						filter(key -> key.contains(prefix)).
@@ -129,11 +138,19 @@ public class DatasourceConfig {
 	 * @return
 	 */
 	@Bean(name = "TransactionManager")
+	@ConditionalOnMissingBean
 	public DataSourceTransactionManager testTransactionManager(DynamicDataSourceSwitch dataSourceSwitch) {
 		return new DataSourceTransactionManager(dataSourceSwitch);
 	}
 
+	/**
+	 * session factory
+	 * @param dataSourceSwitch
+	 * @return
+	 * @throws Exception
+	 */
 	@Bean(name = "sqlSessionFactory")
+	@ConditionalOnMissingBean
 	public SqlSessionFactory sqlSessionFactory(DynamicDataSourceSwitch dataSourceSwitch) throws Exception {
 		return buildSqlSessionFactory(dataSourceSwitch,mybatisProperties.getMapperLocations()[0]);
 	}
