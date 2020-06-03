@@ -12,7 +12,6 @@ import java.lang.annotation.*;
  *   注册到后置处理器中，通过每一个
  * @date  Created in  15:35  2020-04-23.
  */
-
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

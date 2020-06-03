@@ -1,6 +1,5 @@
 package com.fulln.proxys.config;
 
-import com.fulln.proxys.annotation.DataSourceComponent;
 import com.fulln.proxys.annotation.DataSourceComponentScan;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -216,9 +215,9 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 
 			definition.getPropertyValues().add("interfaceClass", clazz);
 
-			Enum value = clazz.getAnnotation(DataSourceComponent.class).DataSource();
+//			Enum value = clazz.getAnnotation(DataSourceComponent.class).DataSource();
 
-			definition.getPropertyValues().add("value",value);
+//			definition.getPropertyValues().add("value",value);
 			definition.setBeanClass(InterfaceFactoryBean.class);
 			definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
 			if (registerSpringBean(clazz)) {

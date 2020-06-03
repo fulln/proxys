@@ -23,9 +23,9 @@ public class HsfTypeFilter extends AbstractClassTestingTypeFilter{
 			return false;
 		}
 		DataSourceComponent hsfComponent = clazz.getAnnotation(DataSourceComponent.class);
-		if (hsfComponent.registerBean() && isAnnotatedBySpring(clazz)) {
-			throw new IllegalStateException("类{" + clazz.getName() + "}已经标识了Spring组件注解,不能再指定[registerBean = true]");
-		}
+//		if (hsfComponent.registerBean() && isAnnotatedBySpring(clazz)) {
+//			throw new IllegalStateException("类{" + clazz.getName() + "}已经标识了Spring组件注解,不能再指定[registerBean = true]");
+//		}
 		//过滤抽象类,接口,注解,枚举,内部类及匿名类
 		return !classMetadata.isAbstract() && !clazz.isInterface() && !clazz.isAnnotation() && !clazz.isEnum()
 				&& !clazz.isMemberClass() && !clazz.getName().contains("$");

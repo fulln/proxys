@@ -1,15 +1,15 @@
 package com.fulln.proxys.annotation;
 
-import com.fulln.proxys.enums.DatasourceEnum;
+import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
 /**
  * @author fulln
- * @description 枚举
+ * @description 使用注解的方式提示数据源的切换
  * @date  Created in  23:12  2019-09-03.
  */
 @Documented
-@Target(ElementType.TYPE)
+@Target({ElementType.METHOD,ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DataSourceComponent {
 	/**
@@ -17,12 +17,9 @@ public @interface DataSourceComponent {
 	 *
 	 * @return
 	 */
-	DatasourceEnum DataSource() default DatasourceEnum.DB1;
+	@AliasFor("value")
+	String DataSource() default "";
 
-	/**
-	 * 是否要将标识此注解的类注册为Spring的Bean
-	 *
-	 * @return
-	 */
-	boolean registerBean() default false;
+	@AliasFor("DataSource")
+	String value() default "";
 }

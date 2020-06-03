@@ -10,10 +10,16 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.boot.autoconfigure.AutoConfigurationPackages;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
  * @author fulln
@@ -21,9 +27,10 @@ import org.springframework.util.ClassUtils;
  * @date Created in  15:30  2020-04-25.
  */
 @Slf4j
-public class DynamicSwitchConfig implements BeanFactoryAware, ImportBeanDefinitionRegistrar  {
+public class DynamicSwitchConfig implements BeanFactoryAware, ImportBeanDefinitionRegistrar {
 
 	private BeanFactory beanFactory;
+
 	/**
 	 * Register bean definitions as necessary based on the given annotation metadata of
 	 * the importing {@code @Configuration} class.
@@ -44,24 +51,28 @@ public class DynamicSwitchConfig implements BeanFactoryAware, ImportBeanDefiniti
 		String defaultDatasourceName = "";
 		if (annAttr != null) {
 			applicationUrl = annAttr.getString("ApplicationUrl");
-			defaultDatasourceName  = annAttr.getString("defaultSourceName");
+			defaultDatasourceName = annAttr.getString("defaultSourceName");
 		}
 
 		log.info("从配置文件中获取到对应的路径:{},开始注册配置类", applicationUrl);
 
-
-
 		BeanDefinitionBuilder builder =
 				BeanDefinitionBuilder.genericBeanDefinition(DynamicSourceSwitchProp.class)
 						.addPropertyValue("applicationUrl", applicationUrl)
-						.addPropertyValue("defaultDatasourceName",defaultDatasourceName);
+						.addPropertyValue("defaultDatasourceName", defaultDatasourceName);
 
 		String beanName = ClassUtils.getShortNameAsProperty(DynamicSourceSwitchProp.class);
 
 		registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
 
+		log.info("注册bean:{},检查是否成功:{}", beanName, beanFactory.getBean(beanName) != null);
 
-		log.info("注册bean:{},检查是否成功:{}",beanName,beanFactory.getBean(beanName) != null);
+		List<String> packages = AutoConfigurationPackages.get(this.beanFactory);
+
+		String urls = packages.stream().findAny().orElse("");
+		if(!StringUtils.isEmpty(urls)){
+			//InfrastructureAdvisorAutoProxyCreator
+		}
 
 	}
 
@@ -80,6 +91,17 @@ public class DynamicSwitchConfig implements BeanFactoryAware, ImportBeanDefiniti
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 		this.beanFactory = beanFactory;
+	}
+
+
+	@Configuration
+	@ConditionalOnBean(DatasourceConfig.class)
+	public static class ScanPackagesAndRegistered implements InitializingBean{
+
+		@Override
+		public void afterPropertiesSet() throws Exception {
+			log.info("current bean registered ok");
+		}
 	}
 
 }
