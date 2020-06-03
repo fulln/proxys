@@ -101,7 +101,6 @@ public class DatasourceConfig {
 
 		propertySources.forEach(propertySource -> {
 			if (propertySource instanceof OriginTrackedMapPropertySource) {
-
 				Map<String, String> map = (Map<String, String>) propertySource.getSource();
 				Set<String> collect = map.keySet().stream().
 						filter(key -> key.contains(prefix)).
