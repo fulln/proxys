@@ -17,8 +17,10 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,8 +71,13 @@ public class DynamicSwitchConfig implements BeanFactoryAware, ImportBeanDefiniti
 
 		List<String> packages = AutoConfigurationPackages.get(this.beanFactory);
 
+		if (ObjectUtils.isEmpty(packages)) {
+			packages = Collections.singletonList(ClassUtils.getPackageName(importingClassMetadata.getClassName()));
+		}
+
 		String urls = packages.stream().findAny().orElse("");
-		if(!StringUtils.isEmpty(urls)){
+
+		if (!StringUtils.isEmpty(urls)) {
 			//InfrastructureAdvisorAutoProxyCreator
 		}
 
@@ -96,7 +103,7 @@ public class DynamicSwitchConfig implements BeanFactoryAware, ImportBeanDefiniti
 
 	@Configuration
 	@ConditionalOnBean(DatasourceConfig.class)
-	public static class ScanPackagesAndRegistered implements InitializingBean{
+	public static class ScanPackagesAndRegistered implements InitializingBean {
 
 		@Override
 		public void afterPropertiesSet() throws Exception {

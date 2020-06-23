@@ -13,6 +13,7 @@ public class CustomInterceptor implements MethodInterceptor, Serializable {
 
 	@Override
 	public Object invoke(MethodInvocation methodInvocation) throws Throwable {
+		//使用代理进行数据yuan切换
 		return null;
 	}
 }

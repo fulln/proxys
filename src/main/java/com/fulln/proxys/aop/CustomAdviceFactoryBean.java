@@ -1,11 +1,11 @@
 package com.fulln.proxys.aop;
 
+import com.fulln.proxys.constance.DynamicSourceConstance;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * @author fulln
@@ -13,8 +13,8 @@ import org.springframework.beans.factory.BeanFactoryAware;
  * @date  Created in  10:30  2020-06-02.
  */
 @SuppressWarnings("serial")
-public class CustomAdviceFactoryBean extends AbstractSingletonProxyFactoryBean
-		implements BeanFactoryAware {
+@Slf4j
+public class CustomAdviceFactoryBean extends AbstractSingletonProxyFactoryBean {
 
 	private final CustomInterceptor interceptor = new CustomInterceptor();
 	private BeanFactory beanFactory;
@@ -27,7 +27,8 @@ public class CustomAdviceFactoryBean extends AbstractSingletonProxyFactoryBean
 	 */
 	@Override
 	protected Object createMainInterceptor() {
-
+		log.info(DynamicSourceConstance.LOG_HEAD + "start create interceptor");
+		beanFactory.getBean("");
 		if (this.pointcut != null) {
 			return new DefaultPointcutAdvisor(this.pointcut, this.interceptor);
 		}
@@ -37,10 +38,6 @@ public class CustomAdviceFactoryBean extends AbstractSingletonProxyFactoryBean
 		}
 	}
 
-	@Override
-	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-		this.beanFactory = beanFactory;
-	}
 
 	/**
 	 * Set a pointcut, i.e a bean that can cause conditional invocation

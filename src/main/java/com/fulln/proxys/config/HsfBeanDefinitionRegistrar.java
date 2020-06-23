@@ -1,15 +1,20 @@
 package com.fulln.proxys.config;
 
+import com.fulln.proxys.annotation.DataSourceComponent;
 import com.fulln.proxys.annotation.DataSourceComponentScan;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -35,12 +40,13 @@ import java.util.List;
 import static org.springframework.core.io.support.ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX;
 
 @Slf4j
-public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
+public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar, ApplicationContextAware {
 
 	private static final HashMap UNDERLYING_MAPPING = new HashMap();
 
 	private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
 
+	private ApplicationContext applicationContext;
 
 	/**
 	 *
@@ -193,13 +199,13 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 	}
 
 
-//	protected String resolveBasePackage(String basePackage) {
-//		return ClassUtils.convertClassNameToResourcePath(this.getEnvironment().resolveRequiredPlaceholders(basePackage));
-//	}
-//
-//	private Environment getEnvironment() {
-//		return applicationContext.getEnvironment();
-//	}
+	protected String resolveBasePackage(String basePackage) {
+		return ClassUtils.convertClassNameToResourcePath(this.getEnvironment().resolveRequiredPlaceholders(basePackage));
+	}
+
+	private Environment getEnvironment() {
+		return applicationContext.getEnvironment();
+	}
 
 
 
@@ -215,9 +221,9 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 
 			definition.getPropertyValues().add("interfaceClass", clazz);
 
-//			Enum value = clazz.getAnnotation(DataSourceComponent.class).DataSource();
+			String value = clazz.getAnnotation(DataSourceComponent.class).DataSource();
 
-//			definition.getPropertyValues().add("value",value);
+			definition.getPropertyValues().add("value", value);
 			definition.setBeanClass(InterfaceFactoryBean.class);
 			definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
 			if (registerSpringBean(clazz)) {
@@ -288,4 +294,8 @@ public class HsfBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar
 
 	}
 
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
 }
