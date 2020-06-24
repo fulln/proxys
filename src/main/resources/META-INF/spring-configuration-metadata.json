@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "me.fulln",
+      "type": "com.fulln.proxys.dto.CustomAnnotationProperties",
+      "sourceType": "com.fulln.proxys.dto.CustomAnnotationProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "me.fulln.defaultName",
+      "type": "java.lang.String",
+      "description": "Default dynamic name",
+      "sourceType": "com.fulln.proxys.dto.CustomAnnotationProperties"
+    }
+  ]
+}

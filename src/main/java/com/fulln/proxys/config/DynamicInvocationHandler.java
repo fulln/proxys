@@ -7,7 +7,12 @@ import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Method;
 
-public class  DymicInvocationHandler implements MethodInterceptor {
+/**
+ * @author fulln
+ * @description
+ * @date Created in  10:11  2020-06-24.
+ */
+public class DynamicInvocationHandler implements MethodInterceptor {
 
 	@Override
 	public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {

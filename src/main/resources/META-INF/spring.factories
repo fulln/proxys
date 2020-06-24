@@ -1,1 +1,3 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.fulln.proxys.config.DatasourceConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.fulln.proxys.config.DatasourceConfig,\
+com.fulln.proxys.config.custom.CustomAnnotationConfiguration
