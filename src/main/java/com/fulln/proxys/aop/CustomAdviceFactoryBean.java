@@ -1,6 +1,6 @@
 package com.fulln.proxys.aop;
 
-import com.fulln.proxys.constance.DynamicSourceConstance;
+import com.fulln.proxys.constant.DynamicSourceConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean;
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.BeanFactory;
 
 /**
  * @author fulln
- * @description advice的factorybean
+ * @description advice的factoryBean
  * @date  Created in  10:30  2020-06-02.
  */
 @SuppressWarnings("serial")
@@ -27,7 +27,7 @@ public class CustomAdviceFactoryBean extends AbstractSingletonProxyFactoryBean {
 	 */
 	@Override
 	protected Object createMainInterceptor() {
-		log.info(DynamicSourceConstance.LOG_HEAD + "start create interceptor");
+		log.info(DynamicSourceConstant.LOG_HEAD + "start create interceptor");
 		beanFactory.getBean("");
 		if (this.pointcut != null) {
 			return new DefaultPointcutAdvisor(this.pointcut, this.interceptor);

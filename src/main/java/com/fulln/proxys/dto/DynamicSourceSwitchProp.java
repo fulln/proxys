@@ -1,6 +1,7 @@
 package com.fulln.proxys.dto;
 
 import lombok.Data;
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 import java.util.Set;
@@ -14,7 +15,7 @@ import java.util.Set;
 public class DynamicSourceSwitchProp {
 
 
-	private ThreadLocal<String> local = new ThreadLocal<>();
+	private static final ThreadLocal<String> LOCAL = new ThreadLocal<>();
 
 	private String applicationUrl;
 
@@ -29,28 +30,42 @@ public class DynamicSourceSwitchProp {
 	 */
 	public void putDataSourceKey(String key) {
 		if(StringUtils.isEmpty(key)){
-			local.set(defaultDatasourceName);
+			LOCAL.set(defaultDatasourceName);
 			return;
 		}
 		if (databaseName.contains(key)) {
-			local.set(key);
+			LOCAL.set(key);
 			return;
 		}
 		throw new RuntimeException("未能找到对应数据");
 	}
+
 	/**
 	 * 获取数据源key
 	 *
 	 * @return
 	 */
 	public String getDataSourceKey() {
-		return local.get();
+		return LOCAL.get();
 	}
 
 	/**
 	 * 清空数据源
 	 */
 	public void clear() {
-		local.remove();
+		LOCAL.remove();
 	}
+
+
+	protected final class SwitchPropInfo {
+
+		@Nullable
+		private final String databaseName;
+
+		public SwitchPropInfo(String databaseName) {
+			this.databaseName = databaseName;
+		}
+	}
+
+
 }

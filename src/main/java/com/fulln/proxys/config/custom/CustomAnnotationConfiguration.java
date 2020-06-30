@@ -36,7 +36,6 @@ public class CustomAnnotationConfiguration {
 	 * 当没有使用自定义注解的时候
 	 */
 	@Configuration
-	//	@ConditionalOnBean(DynamicDataSourceSwitch.class)
 	@ConditionalOnMissingBean(DynamicSwitchConfig.class)
 	public static class EnableCustomDynamicConfiguration {
 

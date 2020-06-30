@@ -23,7 +23,7 @@ public class ScanDynamicResource {
 	private void scan() {}
 
 	@Before("scan()")
-	private void ChangeDatasource(JoinPoint joinPoint) {
+	private void changeDatasource(JoinPoint joinPoint) {
 		Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
 
 		DataSourceComponent annotationClass = AnnotationUtils.findAnnotation(method,

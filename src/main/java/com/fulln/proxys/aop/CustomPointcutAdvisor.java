@@ -26,9 +26,16 @@ public class CustomPointcutAdvisor extends AbstractPointcutAdvisor {
 		return this.interceptor ;
 	}
 
+
+	public void setCustomPointCut(CustomPointCut customPointCut) {
+		this.customPointCut = customPointCut;
+	}
+
+	public void setInterceptor(CustomInterceptor interceptor) {
+		this.interceptor = interceptor;
+	}
+
 	public CustomPointcutAdvisor() {
-		this.customPointCut =  new CustomPointCut();
-		this.interceptor = new CustomInterceptor();
 	}
 
 	public CustomPointcutAdvisor(CustomInterceptor interceptor) {
