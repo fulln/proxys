@@ -19,17 +19,6 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(CustomAnnotationProperties.class)
 public class CustomAnnotationConfiguration {
 
-//	@ConditionalOnSingleCandidate(DatasourceConfig.class)
-//	public static class TransactionTemplateConfiguration {
-//
-//		@Bean
-//		@ConditionalOnMissingBean(TransactionOperations.class)
-//		public TransactionTemplate transactionTemplate(PlatformTransactionManager transactionManager) {
-//			return new TransactionTemplate(transactionManager);
-//		}
-//
-//	}
-
 	/**
 	 * 默认使用cglib的动态代理模式
 	 * 目前不考虑用户自定义的情况

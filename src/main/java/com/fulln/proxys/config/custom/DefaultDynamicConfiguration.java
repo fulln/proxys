@@ -22,6 +22,8 @@ public class DefaultDynamicConfiguration extends AbstractDynamicConfiguration {
 	 * @author fulln
 	 * @description Advisor 用来封装切面的所有信息，主要是上面两个，它用来充当 Advice 和 Pointcut 的适配器。
 	 * @date Created in  2020-06-30  17:44.
+	 * it's used in this place，to get pointcut（）
+	 * {@link org.springframework.aop.support.AopUtils#canApply(org.springframework.aop.Advisor, java.lang.Class, boolean)}
 	 **/
 	@Bean
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
@@ -29,7 +31,7 @@ public class DefaultDynamicConfiguration extends AbstractDynamicConfiguration {
 		CustomPointcutAdvisor advisor = new CustomPointcutAdvisor();
 		advisor.setInterceptor(customInterceptor());
 		advisor.setCustomPointCut(customPointCut());
-		advisor.setOrder(this.enableDy.<Integer>getNumber("order"));
+		advisor.setProp(this.enableDy);
 		return advisor;
 	}
 

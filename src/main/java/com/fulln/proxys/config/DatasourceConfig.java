@@ -21,7 +21,6 @@ import org.springframework.boot.env.OriginTrackedMapPropertySource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
@@ -50,7 +49,6 @@ import java.util.stream.Collectors;
 @Configuration
 @ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class})
 @EnableAspectJAutoProxy
-@Import(ScanDynamicResource.class)
 public class DatasourceConfig {
 
 	/**
