@@ -1,5 +1,6 @@
 package com.fulln.proxys.aop;
 
+import com.fulln.proxys.dto.CustomAnnotationProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.Pointcut;
@@ -13,14 +14,23 @@ import org.springframework.aop.support.AbstractPointcutAdvisor;
 @Slf4j
 public class CustomPointcutAdvisor extends AbstractPointcutAdvisor {
 
-	private CustomPointCut customPointCut;
+	private AbstractCustomPointcutDecorator pointcutDecorator = new AbstractCustomPointcutDecorator() {
+		@Override
+		public ICustomPointCut getCustomPointCut() {
+			return customPointCut;
+		}
+	};
+
+	private ICustomPointCut customPointCut;
 
 	private CustomInterceptor interceptor;
 
 
 	@Override
 	public Pointcut getPointcut() {
-		return this.customPointCut;
+		CustomAnnotationProperties properties = interceptor.getProperties();
+		this.pointcutDecorator.setProperties(properties);
+		return this.pointcutDecorator;
 	}
 
 	@Override
@@ -29,7 +39,7 @@ public class CustomPointcutAdvisor extends AbstractPointcutAdvisor {
 	}
 
 
-	public void setCustomPointCut(CustomPointCut customPointCut) {
+	public void setCustomPointCut(ICustomPointCut customPointCut) {
 		this.customPointCut = customPointCut;
 	}
 

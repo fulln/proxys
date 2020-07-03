@@ -20,7 +20,11 @@ public class CustomInterceptor extends CustomInterceptorSupport implements Metho
 		Class<?> targetClass = (invocation.getThis() != null ? AopUtils.getTargetClass(invocation.getThis()) : null);
 
 		log.info(DynamicSourceConstant.LOG_HEAD.concat("start change current datasource config" + targetClass.getName()));
+
+
 		//开始执行相关操作
 		return invocation.proceed();
+
+
 	}
 }

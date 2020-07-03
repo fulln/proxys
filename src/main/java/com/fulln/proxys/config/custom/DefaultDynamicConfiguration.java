@@ -3,6 +3,7 @@ package com.fulln.proxys.config.custom;
 import com.fulln.proxys.aop.CustomInterceptor;
 import com.fulln.proxys.aop.CustomPointCut;
 import com.fulln.proxys.aop.CustomPointcutAdvisor;
+import com.fulln.proxys.aop.ICustomPointCut;
 import com.fulln.proxys.dto.CustomAnnotationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -54,7 +55,7 @@ public class DefaultDynamicConfiguration extends AbstractDynamicConfiguration {
 	 **/
 	@Bean
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-	public CustomPointCut customPointCut() {
+	public ICustomPointCut customPointCut() {
 		return new CustomPointCut();
 	}
 

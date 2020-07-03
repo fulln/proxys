@@ -1,12 +1,10 @@
 package com.fulln.proxys.aop;
 
-import com.fulln.proxys.annotation.DataSourceComponent;
-import com.fulln.proxys.config.DynamicSwitchConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.support.StaticMethodMatcherPointcut;
-import org.springframework.core.annotation.AnnotatedElementUtils;
 
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author fulln
@@ -14,24 +12,9 @@ import java.lang.reflect.Method;
  * @date  Created in  17:42  2020-06-01.
  */
 @Slf4j
-public class CustomPointCut extends StaticMethodMatcherPointcut implements ICustomPointCut {
+public class CustomPointCut implements ICustomPointCut {
 
-	@Override
-	public boolean matches(Method method, Class<?> aClass) {
-
-		if (CustomPointcutAdvisor.class.isAssignableFrom(aClass) ||
-				DynamicSwitchConfig.class.isAssignableFrom(aClass)) {
-			return false;
-		}
-
-		if (AnnotatedElementUtils.hasAnnotation(method, DataSourceComponent.class)) {
-			log.info("获取到需要动态注解的class"+aClass.getName());
-			return true;
-		}
-
-		return false;
-	}
-
+	private final Map<Object, String> attributeCache = new ConcurrentHashMap<>(1024);
 	/**
 	 * @param clazz  注解的class
 	 * @param method 获取注解的地方

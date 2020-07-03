@@ -9,7 +9,8 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.SimpleBeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackages;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
@@ -42,36 +43,7 @@ public class CustomInterceptorSupport implements BeanFactoryAware, InitializingB
 	 * @see BeanInitializationException
 	 */
 	@Override
-
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-
-		SimpleBeanDefinitionRegistry registry = new SimpleBeanDefinitionRegistry();
-
-
-		String applicationUrl = properties.getApplicationUrl();
-
-		String defaultDatasourceName = properties.getDefaultDatasourceName();
-
-		log.info("从配置文件中获取到对应的路径:{},开始注册配置类", applicationUrl);
-
-		BeanDefinitionBuilder builder =
-				BeanDefinitionBuilder.genericBeanDefinition(DynamicSourceSwitchProp.class)
-						.addPropertyValue(DynamicSourceConstant.APPLICATION_URL, applicationUrl)
-						.addPropertyValue(DynamicSourceConstant.DEFAULT_DATASOURCE_NAME, defaultDatasourceName);
-
-		String beanName = ClassUtils.getShortNameAsProperty(DynamicSourceSwitchProp.class);
-
-		registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
-
-		log.info("注册bean:{},检查是否成功:{}", beanName, beanFactory.getBean(beanName) != null);
-
-
-		List<String> packages = AutoConfigurationPackages.get(beanFactory);
-
-		String urls = packages.stream().findAny().orElse("");
-
-		properties.setDefaultPackageName(urls);
-
 		this.beanFactory = beanFactory;
 	}
 
@@ -96,6 +68,36 @@ public class CustomInterceptorSupport implements BeanFactoryAware, InitializingB
 					"Set the 'properties' property or make sure to run within a support " +
 							"containing a PlatformTransactionManager bean!");
 		}
+		registerPropertiesBean();
+	}
+
+	/**
+	 * 注册一个配置bean  以提供给数据源使用
+	 */
+	private void registerPropertiesBean() {
+		//因为是从context中获取到的bean Factory 所以在这边转换是没有问题的
+		BeanDefinitionRegistry registry = (DefaultListableBeanFactory) beanFactory;
+
+		String applicationUrl = properties.getApplicationUrl();
+
+		String defaultDatasourceName = properties.getDefaultDatasourceName();
+
+		log.info("从配置文件中获取到对应的路径:{},开始注册配置类", applicationUrl);
+
+		BeanDefinitionBuilder builder =
+				BeanDefinitionBuilder.genericBeanDefinition(DynamicSourceSwitchProp.class)
+						.addPropertyValue(DynamicSourceConstant.APPLICATION_URL, applicationUrl)
+						.addPropertyValue(DynamicSourceConstant.DEFAULT_DATASOURCE_NAME, defaultDatasourceName);
+
+		String beanName = ClassUtils.getShortNameAsProperty(DynamicSourceSwitchProp.class);
+
+		registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
+
+		List<String> packages = AutoConfigurationPackages.get(beanFactory);
+
+		String urls = packages.stream().findAny().orElse("");
+
+		properties.setDefaultPackageName(urls);
 	}
 
 	public CustomAnnotationProperties getProperties() {
