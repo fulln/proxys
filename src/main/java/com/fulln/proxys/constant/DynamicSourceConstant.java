@@ -12,4 +12,8 @@ public class DynamicSourceConstant {
 
 	public static final String LOG_HEAD = "[Dynamic-Source]:";
 
+	public static final String APPLICATION_URL = "applicationUrl";
+
+	public static final String DEFAULT_DATASOURCE_NAME = "defaultDatasourceName";
+
 }

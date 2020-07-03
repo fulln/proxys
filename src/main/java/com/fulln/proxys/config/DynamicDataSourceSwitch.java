@@ -3,7 +3,6 @@ package com.fulln.proxys.config;
 import com.fulln.proxys.dto.DynamicSourceSwitchProp;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +13,6 @@ import java.util.Map;
  */
 public class DynamicDataSourceSwitch extends AbstractRoutingDataSource {
 
-    @Resource
     private DynamicSourceSwitchProp prop;
     /**
      *用于存储已实例的数据源map
@@ -37,4 +35,11 @@ public class DynamicDataSourceSwitch extends AbstractRoutingDataSource {
         super.afterPropertiesSet();// 必须添加该句，否则新添加数据源无法识别到
     }
 
+    public DynamicSourceSwitchProp getProp() {
+        return prop;
+    }
+
+    public void setProp(DynamicSourceSwitchProp prop) {
+        this.prop = prop;
+    }
 }

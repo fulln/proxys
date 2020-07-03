@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import com.fulln.proxys.config.custom.CustomAnnotationConfiguration;
 import com.fulln.proxys.dto.DynamicSourceSwitchProp;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
@@ -14,13 +15,13 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.env.OriginTrackedMapPropertySource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
@@ -48,7 +49,7 @@ import java.util.stream.Collectors;
 @EnableConfigurationProperties(MybatisProperties.class)
 @Configuration
 @ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class})
-@EnableAspectJAutoProxy
+@AutoConfigureAfter(CustomAnnotationConfiguration.EnableCustomDynamicConfiguration.class)
 public class DatasourceConfig {
 
 	/**
@@ -84,12 +85,15 @@ public class DatasourceConfig {
 	}
 
 	@Bean
+
 	@SuppressWarnings("uncheck")
 	public DynamicDataSourceSwitch createDynamicDataSourceSwitch() {
 		DynamicDataSourceSwitch dynamicDataSourceSwitch = new DynamicDataSourceSwitch();
 
 		//从bean中获取到之前设置的
 		DynamicSourceSwitchProp prop = beanFactory.getBean(ClassUtils.getShortNameAsProperty(DynamicSourceSwitchProp.class), DynamicSourceSwitchProp.class);
+
+		dynamicDataSourceSwitch.setProp(prop);
 
 		//获取前缀下的dbName 并存入bean中
 		String prefix = prop.getApplicationUrl();
@@ -163,7 +167,6 @@ public class DatasourceConfig {
 		//通用设置
 		GlobalConfig globalConfig = new GlobalConfig();
 		GlobalConfig.DbConfig dbConfig = new GlobalConfig.DbConfig();
-//        dbConfig.setTablePrefix("t_");
 		dbConfig.setIdType(IdType.AUTO);
 		globalConfig.setDbConfig(dbConfig);
 		globalConfig.setBanner(false);

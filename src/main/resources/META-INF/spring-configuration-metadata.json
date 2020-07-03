@@ -8,9 +8,21 @@
   ],
   "properties": [
     {
-      "name": "me.fulln.defaultName",
+      "name": "me.fulln.defaultPackageName",
       "type": "java.lang.String",
-      "description": "Default dynamic name",
+      "description": "Default dynamic package name",
+      "sourceType": "com.fulln.proxys.dto.CustomAnnotationProperties"
+    },
+    {
+      "name": "me.fulln.applicationUrl",
+      "type": "java.lang.String",
+      "description": "Default dynamic application url",
+      "sourceType": "com.fulln.proxys.dto.CustomAnnotationProperties"
+    },
+    {
+      "name": "me.fulln.defaultDatasourceName",
+      "type": "java.lang.String",
+      "description": "Default dynamic default datasource name",
       "sourceType": "com.fulln.proxys.dto.CustomAnnotationProperties"
     }
   ]

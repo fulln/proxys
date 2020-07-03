@@ -2,14 +2,11 @@ package com.fulln.proxys.aop;
 
 import com.fulln.proxys.annotation.DataSourceComponent;
 import com.fulln.proxys.config.DynamicSwitchConfig;
-import com.fulln.proxys.constant.DynamicSourceConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * @author fulln
@@ -17,7 +14,7 @@ import java.util.Arrays;
  * @date  Created in  17:42  2020-06-01.
  */
 @Slf4j
-public class CustomPointCut extends StaticMethodMatcherPointcut implements Serializable {
+public class CustomPointCut extends StaticMethodMatcherPointcut implements ICustomPointCut {
 
 	@Override
 	public boolean matches(Method method, Class<?> aClass) {
@@ -27,14 +24,24 @@ public class CustomPointCut extends StaticMethodMatcherPointcut implements Seria
 			return false;
 		}
 
-		log.info(DynamicSourceConstant.LOG_HEAD.concat("开始匹配符合要求的bean，当前bean为:{}"), aClass.getName());
-
-		Annotation[] annotations = method.getAnnotations();
-		if (Arrays.stream(annotations).anyMatch(annotation -> annotation.getClass().isAssignableFrom(DataSourceComponent.class))) {
+		if (AnnotatedElementUtils.hasAnnotation(method, DataSourceComponent.class)) {
 			log.info("获取到需要动态注解的class"+aClass.getName());
 			return true;
 		}
 
 		return false;
+	}
+
+	/**
+	 * @param clazz  注解的class
+	 * @param method 获取注解的地方
+	 * @return String的值
+	 * @author fulln
+	 * @description 从注解上获取对应的值，
+	 * @date Created in  2020-07-02  15:25.
+	 **/
+	@Override
+	public String getAnnotationAttr(Class clazz, Method method) {
+		return null;
 	}
 }

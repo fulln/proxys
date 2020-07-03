@@ -44,5 +44,5 @@ public @interface EnableDynamicSource {
 	/**
 	 * 默认连接的数据源
 	 */
-	String defaultSourceName() default "";
+	String defaultDatasourceName() default "";
 }
