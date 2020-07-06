@@ -13,7 +13,7 @@ java 代理模式进行数据源的切换
 <dependency>
     <groupId>com.fulln</groupId>
     <artifactId>datasource-switch-spring-boot-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>2.0.0-RELEASE</version>
 </dependency>
 ```
 - 在启动类上加载`@EnableDynamicSource`

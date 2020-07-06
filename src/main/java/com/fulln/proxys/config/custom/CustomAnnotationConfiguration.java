@@ -1,7 +1,6 @@
 package com.fulln.proxys.config.custom;
 
 import com.fulln.proxys.annotation.EnableDynamicSource;
-import com.fulln.proxys.config.DynamicSwitchConfig;
 import com.fulln.proxys.dto.CustomAnnotationProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

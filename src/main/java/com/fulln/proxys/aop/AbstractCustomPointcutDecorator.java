@@ -1,7 +1,6 @@
 package com.fulln.proxys.aop;
 
 import com.fulln.proxys.annotation.DataSourceComponent;
-import com.fulln.proxys.config.DynamicSwitchConfig;
 import com.fulln.proxys.constant.DynamicSourceConstant;
 import com.fulln.proxys.dto.CustomAnnotationProperties;
 import lombok.Setter;
