@@ -31,6 +31,8 @@ public class CustomInterceptorSupport implements BeanFactoryAware, InitializingB
 	@Nullable
 	private CustomAnnotationProperties properties;
 
+	@Nullable
+	protected DynamicSourceSwitchProp prop;
 	/**
 	 * Callback that supplies the owning factory to a bean instance.
 	 * <p>Invoked after the population of normal bean properties
@@ -69,6 +71,7 @@ public class CustomInterceptorSupport implements BeanFactoryAware, InitializingB
 							"containing a PlatformTransactionManager bean!");
 		}
 		registerPropertiesBean();
+		prop = getBeanFactory().getBean(ClassUtils.getShortNameAsProperty(DynamicSourceSwitchProp.class), DynamicSourceSwitchProp.class);
 	}
 
 	/**
@@ -98,6 +101,10 @@ public class CustomInterceptorSupport implements BeanFactoryAware, InitializingB
 		String urls = packages.stream().findAny().orElse("");
 
 		properties.setDefaultPackageName(urls);
+	}
+
+	public BeanFactory getBeanFactory() {
+		return this.beanFactory;
 	}
 
 	public CustomAnnotationProperties getProperties() {

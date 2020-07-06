@@ -29,14 +29,20 @@ public class DynamicSourceSwitchProp {
 	 * @param key
 	 */
 	public void putDataSourceKey(String key) {
+
 		if(StringUtils.isEmpty(key)){
-			LOCAL.set(defaultDatasourceName);
+			key = defaultDatasourceName;
+		}
+
+		if (LOCAL.get() != null && LOCAL.get().equals(key)) {
 			return;
 		}
+
 		if (databaseName.contains(key)) {
 			LOCAL.set(key);
 			return;
 		}
+
 		throw new RuntimeException("未能找到对应数据");
 	}
 
@@ -46,6 +52,10 @@ public class DynamicSourceSwitchProp {
 	 * @return
 	 */
 	public String getDataSourceKey() {
+		String s = LOCAL.get();
+		if (StringUtils.isEmpty(s)) {
+			LOCAL.set(defaultDatasourceName);
+		}
 		return LOCAL.get();
 	}
 

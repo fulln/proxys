@@ -14,14 +14,7 @@ import org.springframework.aop.support.AbstractPointcutAdvisor;
 @Slf4j
 public class CustomPointcutAdvisor extends AbstractPointcutAdvisor {
 
-	private AbstractCustomPointcutDecorator pointcutDecorator = new AbstractCustomPointcutDecorator() {
-		@Override
-		public ICustomPointCut getCustomPointCut() {
-			return customPointCut;
-		}
-	};
-
-	private ICustomPointCut customPointCut;
+	private AbstractCustomPointcutDecorator pointcutDecorator;
 
 	private CustomInterceptor interceptor;
 
@@ -40,7 +33,12 @@ public class CustomPointcutAdvisor extends AbstractPointcutAdvisor {
 
 
 	public void setCustomPointCut(ICustomPointCut customPointCut) {
-		this.customPointCut = customPointCut;
+		this.pointcutDecorator = new AbstractCustomPointcutDecorator() {
+			@Override
+			public ICustomPointCut getCustomPointCut() {
+				return customPointCut;
+			}
+		};
 	}
 
 	public void setInterceptor(CustomInterceptor interceptor) {

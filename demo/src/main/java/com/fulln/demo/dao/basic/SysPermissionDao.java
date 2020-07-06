@@ -3,7 +3,6 @@ package com.fulln.demo.dao.basic;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fulln.demo.model.SysPermission;
-import com.fulln.proxys.annotation.DataSourceComponent;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.List;
  * @Version： 0.0.1
  **/
 @Repository
-@DataSourceComponent("data2")
 public interface SysPermissionDao extends BaseMapper<SysPermission> {
 
     /**
