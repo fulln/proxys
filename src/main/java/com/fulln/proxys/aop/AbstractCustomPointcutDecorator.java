@@ -95,8 +95,7 @@ public abstract class AbstractCustomPointcutDecorator extends StaticMethodMatche
 			return false;
 		}
 
-		if (CustomPointcutAdvisor.class.isAssignableFrom(aClass) ||
-				DynamicSwitchConfig.class.isAssignableFrom(aClass)) {
+		if (CustomPointcutAdvisor.class.isAssignableFrom(aClass)) {
 			this.attributeCache.put(cacheKey,NULL_CUSTOM_POINTCUT);
 			return false;
 		}

@@ -2,7 +2,6 @@ package com.fulln.proxys.config.custom;
 
 import com.fulln.proxys.annotation.EnableDynamicSource;
 import com.fulln.proxys.dto.CustomAnnotationProperties;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +20,6 @@ public class CustomAnnotationConfiguration {
 	 * 当没有使用自定义注解的时候
 	 */
 	@Configuration
-	@ConditionalOnMissingBean(DynamicSwitchConfig.class)
 	public static class EnableCustomDynamicConfiguration {
 
 		@Configuration
