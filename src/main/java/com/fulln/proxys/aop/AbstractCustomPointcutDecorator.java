@@ -29,11 +29,6 @@ public abstract class AbstractCustomPointcutDecorator extends StaticMethodMatche
 		public String getAnnotationAttr(Class clazz, Method method) {
 			return null;
 		}
-
-		@Override
-		public String toString() {
-			return "null";
-		}
 	};
 
 	/**

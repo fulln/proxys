@@ -72,8 +72,8 @@ public class DefaultDynamicConfiguration extends AbstractDynamicConfiguration {
 		CustomInterceptor customInterceptor = new CustomInterceptor();
 		if (checkProperties(properties)) {
 			CustomAnnotationProperties customAnnotationProperties = new CustomAnnotationProperties();
-			customAnnotationProperties.setApplicationUrl(this.enableDy.getString(APPLICATION_URL));
-			customAnnotationProperties.setDefaultDatasourceName(this.enableDy.getString(DEFAULT_DATASOURCE_NAME));
+			customAnnotationProperties.setApplicationUrl(properties.getApplicationUrl() != null ? this.enableDy.getString(APPLICATION_URL) : properties.getApplicationUrl());
+			customAnnotationProperties.setDefaultDatasourceName(properties.getApplicationUrl() != null ? this.enableDy.getString(DEFAULT_DATASOURCE_NAME) : properties.getDefaultDatasourceName());
 			customInterceptor.setProperties(customAnnotationProperties);
 		} else {
 			customInterceptor.setProperties(properties);

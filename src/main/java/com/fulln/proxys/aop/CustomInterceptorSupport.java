@@ -100,7 +100,7 @@ public class CustomInterceptorSupport implements BeanFactoryAware, InitializingB
 
 		String urls = packages.stream().findAny().orElse("");
 
-		properties.setDefaultPackageName(urls);
+		properties.setDefaultPackageName(properties.getDefaultPackageName() == null ? urls : properties.getDefaultPackageName());
 	}
 
 	public BeanFactory getBeanFactory() {
