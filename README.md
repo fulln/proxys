@@ -16,7 +16,6 @@ java 代理模式进行数据源的切换
     <version>2.0.0-RELEASE</version>
 </dependency>
 ```
-- 在启动类上加载`@EnableDynamicSource`
 
 - 在需要切换的查询方法上面加上对应注解`@DataSourceComponent`
 
@@ -26,10 +25,15 @@ java 代理模式进行数据源的切换
  - [x] 支持在类上直接加注解，从而每次访问这个类的所有方法的时候都是可以直接切换
 
 ## 流程图
+
 - 启动的相关流程
 
 ![pic](./pic/lct.png)
 
-- 使用相关流程图
+- 代理相关流程图
 
-![pic](./pic/sy.png)
+![pic](./pic/dl.png)
+
+- 数据源注册相关流程图
+![pic](./pic/db.png)
+
