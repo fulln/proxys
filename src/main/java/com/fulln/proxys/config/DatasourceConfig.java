@@ -22,17 +22,17 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.env.OriginTrackedMapPropertySource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.env.*;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -77,7 +77,7 @@ public class DatasourceConfig {
 		String prefix = applicationUrl + "." + dbname + ".";
 
 		dataSource.setJdbcUrl(environment.getProperty(prefix + "jdbc-url"));
-		log.info("动态创建{}的数据库连接url = {}" ,dbname ,dataSource.getJdbcUrl());
+		log.info("动态创建{}的数据库连接url = {}", dbname, dataSource.getJdbcUrl());
 		dataSource.setUsername(environment.getProperty(prefix + "username"));
 		dataSource.setPassword(environment.getProperty(prefix + "password"));
 		dataSource.setDriverClassName(environment.getProperty(prefix + "driver-class-name"));
@@ -85,7 +85,6 @@ public class DatasourceConfig {
 	}
 
 	@Bean
-
 	@SuppressWarnings("uncheck")
 	public DynamicDataSourceSwitch createDynamicDataSourceSwitch() {
 		DynamicDataSourceSwitch dynamicDataSourceSwitch = new DynamicDataSourceSwitch();
@@ -102,6 +101,28 @@ public class DatasourceConfig {
 		MutablePropertySources propertySources = environment.getPropertySources();
 
 		propertySources.forEach(propertySource -> {
+			//对应远程env设置
+			if (propertySource instanceof CompositePropertySource
+			) {
+				Collection<PropertySource<?>> collection = ((CompositePropertySource) propertySource).getPropertySources();
+				if (!CollectionUtils.isEmpty(collection)) {
+					MapPropertySource mapPropertySource = (MapPropertySource) collection.stream().findFirst().get();
+					Set<String> collect = mapPropertySource.getSource().keySet().stream()
+							.filter(key -> key.contains(prefix)).
+									map(single -> {
+										String replace = single.replace(prefix + ".", "");
+										return replace.split("\\.")[0];
+									}).collect(Collectors.toSet());
+					if (!CollectionUtils.isEmpty(collect)) {
+						if (!CollectionUtils.isEmpty(prop.getDatabaseName())) {
+							prop.getDatabaseName().addAll(collect);
+						} else {
+							prop.setDatabaseName(collect);
+						}
+					}
+				}
+			}
+			//对应本地env设置
 			if (propertySource instanceof OriginTrackedMapPropertySource) {
 				Map<String, String> map = (Map<String, String>) propertySource.getSource();
 				Set<String> collect = map.keySet().stream().
@@ -111,9 +132,16 @@ public class DatasourceConfig {
 							String replace = single.replace(prefix + ".", "");
 							return replace.split("\\.")[0];
 						}).collect(Collectors.toSet());
-				prop.setDatabaseName(collect);
+				if (!CollectionUtils.isEmpty(collect)) {
+					if (!CollectionUtils.isEmpty(prop.getDatabaseName())) {
+						prop.getDatabaseName().addAll(collect);
+					} else {
+						prop.setDatabaseName(collect);
+					}
+				}
 			}
 		});
+
 
 		Map<Object, Object> map = new HashMap<>(prop.getDatabaseName().size());
 		//自定义数据源key值，将创建好的数据源对象，赋值到targetDataSources中,用于切换数据源时指定对应key即可切换
@@ -136,6 +164,7 @@ public class DatasourceConfig {
 
 	/**
 	 * 开启事务
+	 *
 	 * @return
 	 */
 	@Bean(name = "TransactionManager")
@@ -146,6 +175,7 @@ public class DatasourceConfig {
 
 	/**
 	 * session factory
+	 *
 	 * @param dataSourceSwitch
 	 * @return
 	 * @throws Exception
@@ -153,11 +183,12 @@ public class DatasourceConfig {
 	@Bean(name = "sqlSessionFactory")
 	@ConditionalOnMissingBean
 	public SqlSessionFactory sqlSessionFactory(DynamicDataSourceSwitch dataSourceSwitch) throws Exception {
-		return buildSqlSessionFactory(dataSourceSwitch,mybatisProperties.getMapperLocations()[0]);
+		return buildSqlSessionFactory(dataSourceSwitch, mybatisProperties.getMapperLocations()[0]);
 	}
 
 	/**
 	 * mybatis-plus构建sessionFactory
+	 *
 	 * @param dataSource
 	 * @param sqlMapConfig
 	 * @return
