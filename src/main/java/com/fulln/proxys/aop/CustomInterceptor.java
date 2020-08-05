@@ -1,13 +1,14 @@
 package com.fulln.proxys.aop;
 
 import com.fulln.proxys.annotation.DataSourceComponent;
-import com.fulln.proxys.constant.DynamicSourceConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.StringUtils;
+
+import static com.fulln.proxys.constant.DynamicSourceConstant.LOG_HEAD;
 
 /**
  * @author fulln
@@ -33,7 +34,7 @@ public class CustomInterceptor extends CustomInterceptorSupport implements Metho
 			if (prop == null) {
 				throw new RuntimeException("当前获取到的数据源配置异常!");
 			}
-			log.info(DynamicSourceConstant.LOG_HEAD.concat("start change current datasource to [{}]"), StringUtils.isEmpty(dataSourceKey) ? prop.getDefaultDatasourceName() : dataSourceKey);
+			log.info(LOG_HEAD.concat("start change current datasource to [{}]"), StringUtils.isEmpty(dataSourceKey) ? prop.getDefaultDatasourceName() : dataSourceKey);
 			//给当前的执行SQL的操作设置特殊的数据源的信息
 			prop.putDataSourceKey(dataSourceKey);
 		}

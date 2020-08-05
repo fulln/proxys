@@ -6,17 +6,17 @@ import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import com.fulln.proxys.config.custom.CustomAnnotationConfiguration;
+import com.fulln.proxys.config.custom.DefaultDynamicConfiguration;
 import com.fulln.proxys.dto.DynamicSourceSwitchProp;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.env.OriginTrackedMapPropertySource;
@@ -24,19 +24,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.*;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.fulln.proxys.constant.DynamicSourceConstant.LOG_HEAD;
 
 /**
  * @author fulln
@@ -48,7 +48,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @EnableConfigurationProperties(MybatisProperties.class)
 @Configuration
-@ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class})
+@ConditionalOnBean(DefaultDynamicConfiguration.class)
+@ConditionalOnMissingBean({SqlSessionFactory.class})
 @AutoConfigureAfter(CustomAnnotationConfiguration.EnableCustomDynamicConfiguration.class)
 public class DatasourceConfig {
 
@@ -77,7 +78,7 @@ public class DatasourceConfig {
 		String prefix = applicationUrl + "." + dbname + ".";
 
 		dataSource.setJdbcUrl(environment.getProperty(prefix + "jdbc-url"));
-		log.info("动态创建{}的数据库连接url = {}", dbname, dataSource.getJdbcUrl());
+		log.info(LOG_HEAD.concat("create database connection [{}] dynamically ，url =[{}] "), dbname, dataSource.getJdbcUrl());
 		dataSource.setUsername(environment.getProperty(prefix + "username"));
 		dataSource.setPassword(environment.getProperty(prefix + "password"));
 		dataSource.setDriverClassName(environment.getProperty(prefix + "driver-class-name"));
@@ -105,22 +106,33 @@ public class DatasourceConfig {
 			if (propertySource instanceof CompositePropertySource
 			) {
 				Collection<PropertySource<?>> collection = ((CompositePropertySource) propertySource).getPropertySources();
-				if (!CollectionUtils.isEmpty(collection)) {
-					MapPropertySource mapPropertySource = (MapPropertySource) collection.stream().findFirst().get();
-					Set<String> collect = mapPropertySource.getSource().keySet().stream()
-							.filter(key -> key.contains(prefix)).
-									map(single -> {
-										String replace = single.replace(prefix + ".", "");
-										return replace.split("\\.")[0];
-									}).collect(Collectors.toSet());
-					if (!CollectionUtils.isEmpty(collect)) {
-						if (!CollectionUtils.isEmpty(prop.getDatabaseName())) {
-							prop.getDatabaseName().addAll(collect);
-						} else {
-							prop.setDatabaseName(collect);
-						}
-					}
+				if (CollectionUtils.isEmpty(collection)) {
+					log.info(LOG_HEAD.concat("can't find any PropertySource in CompositePropertySource,will it get from remote source?"));
+					return;
 				}
+				CompositePropertySource compositePropertySource = (CompositePropertySource) collection.stream().findFirst().get();
+				Collection<PropertySource<?>> propertyCollect = compositePropertySource.getPropertySources();
+				if (CollectionUtils.isEmpty(propertyCollect)) {
+					log.warn(LOG_HEAD.concat("can't find any PropertySource in MapPropertySource,will it get from remote source?"));
+					return;
+				}
+				MapPropertySource mapPropertySource = (MapPropertySource) propertyCollect.stream().findFirst().get();
+				Set<String> collect = mapPropertySource.getSource().keySet().stream()
+						.filter(key -> key.contains(prefix)).
+								map(single -> {
+									String replace = single.replace(prefix + ".", "");
+									return replace.split("\\.")[0];
+								}).collect(Collectors.toSet());
+				if (CollectionUtils.isEmpty(collect)) {
+					log.info(LOG_HEAD.concat("can't find any database name from remote,will it properties from remote source?"));
+					return;
+				}
+				if (!CollectionUtils.isEmpty(prop.getDatabaseName())) {
+					prop.getDatabaseName().addAll(collect);
+				} else {
+					prop.setDatabaseName(collect);
+				}
+				return;
 			}
 			//对应本地env设置
 			if (propertySource instanceof OriginTrackedMapPropertySource) {
@@ -132,13 +144,16 @@ public class DatasourceConfig {
 							String replace = single.replace(prefix + ".", "");
 							return replace.split("\\.")[0];
 						}).collect(Collectors.toSet());
-				if (!CollectionUtils.isEmpty(collect)) {
-					if (!CollectionUtils.isEmpty(prop.getDatabaseName())) {
-						prop.getDatabaseName().addAll(collect);
-					} else {
-						prop.setDatabaseName(collect);
-					}
+				if (CollectionUtils.isEmpty(collect)) {
+					log.info(LOG_HEAD.concat("can't find any database name from local properties,will it properties from local source?"));
+					return;
 				}
+				if (!CollectionUtils.isEmpty(prop.getDatabaseName())) {
+					prop.getDatabaseName().addAll(collect);
+				} else {
+					prop.setDatabaseName(collect);
+				}
+
 			}
 		});
 
@@ -183,18 +198,18 @@ public class DatasourceConfig {
 	@Bean(name = "sqlSessionFactory")
 	@ConditionalOnMissingBean
 	public SqlSessionFactory sqlSessionFactory(DynamicDataSourceSwitch dataSourceSwitch) throws Exception {
-		return buildSqlSessionFactory(dataSourceSwitch, mybatisProperties.getMapperLocations()[0]);
+		return buildSqlSessionFactory(dataSourceSwitch, mybatisProperties.resolveMapperLocations());
 	}
 
 	/**
 	 * mybatis-plus构建sessionFactory
 	 *
-	 * @param dataSource
-	 * @param sqlMapConfig
-	 * @return
+	 * @param dataSource  数据源
+	 * @param resources  mapper-location
+	 * @return sqlSessionFactory
 	 * @throws Exception
 	 */
-	static SqlSessionFactory buildSqlSessionFactory(DataSource dataSource, String sqlMapConfig) throws Exception {
+	static SqlSessionFactory buildSqlSessionFactory(DataSource dataSource, Resource[] resources) throws Exception {
 		//通用设置
 		GlobalConfig globalConfig = new GlobalConfig();
 		GlobalConfig.DbConfig dbConfig = new GlobalConfig.DbConfig();
@@ -213,12 +228,8 @@ public class DatasourceConfig {
 		sqlSessionFactory.setConfiguration(mybatisConfiguration);
 		sqlSessionFactory.setGlobalConfig(globalConfig);
 		sqlSessionFactory.setDataSource(dataSource);
-		try {
-			Resource[] resources = new PathMatchingResourcePatternResolver().getResources(sqlMapConfig);
-			sqlSessionFactory.setMapperLocations(resources);
-		} catch (IOException e) {
-			log.error("加载 sqlmap 配置文件失败，路径={}, 详情={}", sqlMapConfig, e.getMessage(), e);
-		}
+		sqlSessionFactory.setMapperLocations(resources);
+
 		return sqlSessionFactory.getObject();
 	}
 

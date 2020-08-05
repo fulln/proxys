@@ -1,7 +1,6 @@
 package com.fulln.proxys.aop;
 
 import com.fulln.proxys.annotation.DataSourceComponent;
-import com.fulln.proxys.constant.DynamicSourceConstant;
 import com.fulln.proxys.dto.CustomAnnotationProperties;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +14,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.fulln.proxys.constant.DynamicSourceConstant.LOG_HEAD;
 
 @Slf4j
 @Setter
@@ -102,14 +103,14 @@ public abstract class AbstractCustomPointcutDecorator extends StaticMethodMatche
 
 		if (AnnotatedElementUtils.hasAnnotation(aClass, DataSourceComponent.class)) {
 			this.attributeCache.put(cacheKey,customPointCut);
-			log.info(DynamicSourceConstant.LOG_HEAD + "get Annotation class [{}] and get Annotation method [{}]: ", aClass.getName(), method.getName());
+			log.info(LOG_HEAD.concat("get Annotation class [{}] and get Annotation method [{}]: "), aClass.getName(), method.getName());
 			return true;
 		}
 
 
 		if (AnnotatedElementUtils.hasAnnotation(method, DataSourceComponent.class)) {
 			this.attributeCache.put(cacheKey,customPointCut);
-			log.info(DynamicSourceConstant.LOG_HEAD + "get Annotation class [{}] and get Annotation method [{}]: ", aClass.getName(), method.getName());
+			log.info(LOG_HEAD.concat("get Annotation class [{}] and get Annotation method [{}]: "), aClass.getName(), method.getName());
 			return true;
 		}
 

@@ -17,6 +17,8 @@ import org.springframework.util.ClassUtils;
 
 import java.util.List;
 
+import static com.fulln.proxys.constant.DynamicSourceConstant.LOG_HEAD;
+
 /**
  * @author fulln
  * @description 用来初始化功能性的bean和属性
@@ -85,7 +87,7 @@ public class CustomInterceptorSupport implements BeanFactoryAware, InitializingB
 
 		String defaultDatasourceName = properties.getDefaultDatasourceName();
 
-		log.info("从配置文件中获取到对应的路径:{},开始注册配置类", applicationUrl);
+		log.info(LOG_HEAD.concat("get url [{}] from config properties,let's begin to registered datasource bean"), applicationUrl);
 
 		BeanDefinitionBuilder builder =
 				BeanDefinitionBuilder.genericBeanDefinition(DynamicSourceSwitchProp.class)
