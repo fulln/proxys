@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
     <url>https://github.com/fulln/proxys</url>
     <name>proxys</name>
-    <description>dynamic change datasource with custome annotation</description>
+    <description>dynamic change datasource with customs annotation</description>
     <scm>
         <url>https://github.com/fulln/proxys</url>
         <connection>https://github.com/fulln/proxys.git</connection>
@@ -95,167 +95,93 @@
         </dependency>
     </dependencies>
 
-    <!--    <profiles>-->
-    <!--        <profile>-->
-    <!--            <id>default</id>-->
-    <!--            <activation>-->
-    <!--                <activeByDefault>true</activeByDefault>-->
-    <!--            </activation>-->
-    <!--            <build>-->
-    <!--                <resources>-->
-    <!--                    <resource>-->
-    <!--                        <directory>src/main/resources</directory>-->
-    <!--                        <includes>-->
-    <!--                            <include>META-INF/**</include>-->
-    <!--                        </includes>-->
-    <!--                        <filtering>true</filtering>-->
-    <!--                    </resource>-->
-    <!--                </resources>-->
-    <!--                <plugins>-->
-    <!--                    <plugin>-->
-    <!--                        <artifactId>maven-source-plugin</artifactId>-->
-    <!--                        <version>3.0.1</version>-->
-    <!--                        <configuration>-->
-    <!--                            <attach>true</attach>-->
-    <!--                        </configuration>-->
-    <!--                        <executions>-->
-    <!--                            <execution>-->
-    <!--                                <phase>compile</phase>-->
-    <!--                                <goals>-->
-    <!--                                    <goal>jar</goal>-->
-    <!--                                </goals>-->
-    <!--                            </execution>-->
-    <!--                        </executions>-->
-    <!--                    </plugin>-->
-    <!--                    <plugin>-->
-    <!--                        <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                        <artifactId>maven-javadoc-plugin</artifactId>-->
-    <!--                        <version>2.10.1</version>-->
-    <!--                        <executions>-->
-    <!--                            <execution>-->
-    <!--                                <phase>package</phase>-->
-    <!--                                <goals>-->
-    <!--                                    <goal>jar</goal>-->
-    <!--                                </goals>-->
-    <!--                            </execution>-->
-    <!--                        </executions>-->
-    <!--                    </plugin>-->
-    <!--                    <plugin>-->
-    <!--                        <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                        <artifactId>maven-gpg-plugin</artifactId>-->
-    <!--                        <version>1.6</version>-->
-    <!--                        <executions>-->
-    <!--                            <execution>-->
-    <!--                                <phase>verify</phase>-->
-    <!--                                <goals>-->
-    <!--                                    <goal>sign</goal>-->
-    <!--                                </goals>-->
-    <!--                            </execution>-->
-    <!--                        </executions>-->
-    <!--                    </plugin>-->
-    <!--                    <plugin>-->
-    <!--                        <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                        <artifactId>maven-deploy-plugin</artifactId>-->
-    <!--                        <version>2.8.2</version>-->
-    <!--                        <configuration>-->
-    <!--                            <skip>false</skip>-->
-    <!--                        </configuration>-->
-    <!--                    </plugin>-->
-    <!--                </plugins>-->
-    <!--            </build>-->
-    <!--            <distributionManagement>-->
-    <!--                <snapshotRepository>-->
-    <!--                    <id>ossrh</id>-->
-    <!--                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>-->
-    <!--                </snapshotRepository>-->
-    <!--                <repository>-->
-    <!--                    <id>ossrh</id>-->
-    <!--                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
-    <!--                </repository>-->
-    <!--            </distributionManagement>-->
-    <!--        </profile>-->
-    <!--    </profiles>-->
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>META-INF/**</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-javadoc-plugin</artifactId>-->
-            <!--                <version>2.10.1</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <phase>package</phase>-->
-            <!--&lt;!&ndash;                        <goals>&ndash;&gt;-->
-            <!--&lt;!&ndash;                            <goal>jar</goal>&ndash;&gt;-->
-            <!--&lt;!&ndash;                        </goals>&ndash;&gt;-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <configuration>
-                    <additionalJOptions>-html5</additionalJOptions>
-                    <additionalparam>-Xdoclint:none</additionalparam>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
-                <configuration>
-                    <skip>false</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <includes>
+                            <include>META-INF/**</include>
+                        </includes>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <configuration>
+                            <attach>true</attach>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <charset>UTF-8</charset>
+                            <additionalJOptions>
+                                <additionalOption>-Xdoclint:none</additionalOption>
+                            </additionalJOptions>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.8.2</version>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
 
 </project>
