@@ -1,15 +1,15 @@
-package com.fulln.proxys.aop;
+package me.fulln.proxys.aop;
 
-import com.fulln.proxys.dto.CustomAnnotationProperties;
 import lombok.extern.slf4j.Slf4j;
+import me.fulln.proxys.dto.CustomAnnotationProperties;
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.AbstractPointcutAdvisor;
 
 /**
  * @author fulln
- * @description  自定义的advisor 用于注入自定义的相关注解
- * @date  Created in  19:22  2020-05-28.
+ * @description 自定义的advisor 用于注入自定义的相关注解
+ * @date Created in  19:22  2020-05-28.
  */
 @Slf4j
 public class CustomPointcutAdvisor extends AbstractPointcutAdvisor {
@@ -28,7 +28,7 @@ public class CustomPointcutAdvisor extends AbstractPointcutAdvisor {
 
 	@Override
 	public Advice getAdvice() {
-		return this.interceptor ;
+		return this.interceptor;
 	}
 
 

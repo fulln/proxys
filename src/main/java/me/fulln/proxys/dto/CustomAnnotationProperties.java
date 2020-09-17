@@ -1,4 +1,4 @@
-package com.fulln.proxys.dto;
+package me.fulln.proxys.dto;
 
 
 import lombok.Getter;

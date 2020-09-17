@@ -1,6 +1,6 @@
-package com.fulln.proxys.annotation;
+package me.fulln.proxys.annotation;
 
-import com.fulln.proxys.config.custom.CustomDynamicSwitchConfig;
+import me.fulln.proxys.config.custom.CustomDynamicSwitchConfig;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;

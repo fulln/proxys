@@ -1,7 +1,7 @@
-package com.fulln.proxys.config.custom;
+package me.fulln.proxys.config.custom;
 
-import com.fulln.proxys.annotation.EnableDynamicSource;
 import lombok.extern.slf4j.Slf4j;
+import me.fulln.proxys.annotation.EnableDynamicSource;
 import org.springframework.context.annotation.ImportAware;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;

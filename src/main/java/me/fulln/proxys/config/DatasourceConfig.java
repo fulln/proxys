@@ -1,23 +1,26 @@
-package com.fulln.proxys.config;
+package me.fulln.proxys.config;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
-import com.fulln.proxys.config.custom.CustomAnnotationConfiguration;
-import com.fulln.proxys.config.custom.DefaultDynamicConfiguration;
-import com.fulln.proxys.dto.DynamicSourceSwitchProp;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
+import me.fulln.proxys.config.custom.CustomAnnotationConfiguration;
+import me.fulln.proxys.config.custom.DefaultDynamicConfiguration;
+import me.fulln.proxys.constant.DynamicSourceConstant;
+import me.fulln.proxys.dto.DynamicSourceSwitchProp;
 import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.env.OriginTrackedMapPropertySource;
 import org.springframework.context.annotation.Bean;
@@ -36,8 +39,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.fulln.proxys.constant.DynamicSourceConstant.LOG_HEAD;
-
 /**
  * @author fulln
  * @description 数据源动态创建
@@ -49,8 +50,9 @@ import static com.fulln.proxys.constant.DynamicSourceConstant.LOG_HEAD;
 @EnableConfigurationProperties(MybatisProperties.class)
 @Configuration
 @ConditionalOnBean(DefaultDynamicConfiguration.class)
+@ConditionalOnProperty
 @ConditionalOnMissingBean({SqlSessionFactory.class})
-@AutoConfigureAfter(CustomAnnotationConfiguration.EnableCustomDynamicConfiguration.class)
+@AutoConfigureAfter(CustomAnnotationConfiguration.class)
 public class DatasourceConfig {
 
 	/**
@@ -78,7 +80,7 @@ public class DatasourceConfig {
 		String prefix = applicationUrl + "." + dbname + ".";
 
 		dataSource.setJdbcUrl(environment.getProperty(prefix + "jdbc-url"));
-		log.info(LOG_HEAD.concat("create database connection [{}] dynamically ，url =[{}] "), dbname, dataSource.getJdbcUrl());
+		log.info(DynamicSourceConstant.LOG_HEAD.concat("create database connection [{}] dynamically ，url =[{}] "), dbname, dataSource.getJdbcUrl());
 		dataSource.setUsername(environment.getProperty(prefix + "username"));
 		dataSource.setPassword(environment.getProperty(prefix + "password"));
 		dataSource.setDriverClassName(environment.getProperty(prefix + "driver-class-name"));
@@ -107,13 +109,13 @@ public class DatasourceConfig {
 			) {
 				Collection<PropertySource<?>> collection = ((CompositePropertySource) propertySource).getPropertySources();
 				if (CollectionUtils.isEmpty(collection)) {
-					log.info(LOG_HEAD.concat("can't find any PropertySource in CompositePropertySource,will it get from remote source?"));
+					log.info(DynamicSourceConstant.LOG_HEAD.concat("can't find any PropertySource in CompositePropertySource,will it get from remote source?"));
 					return;
 				}
 				CompositePropertySource compositePropertySource = (CompositePropertySource) collection.stream().findFirst().get();
 				Collection<PropertySource<?>> propertyCollect = compositePropertySource.getPropertySources();
 				if (CollectionUtils.isEmpty(propertyCollect)) {
-					log.warn(LOG_HEAD.concat("can't find any PropertySource in MapPropertySource,will it get from remote source?"));
+					log.warn(DynamicSourceConstant.LOG_HEAD.concat("can't find any PropertySource in MapPropertySource,will it get from remote source?"));
 					return;
 				}
 				MapPropertySource mapPropertySource = (MapPropertySource) propertyCollect.stream().findFirst().get();
@@ -124,7 +126,7 @@ public class DatasourceConfig {
 									return replace.split("\\.")[0];
 								}).collect(Collectors.toSet());
 				if (CollectionUtils.isEmpty(collect)) {
-					log.info(LOG_HEAD.concat("can't find any database name from remote,will it properties from remote source?"));
+					log.info(DynamicSourceConstant.LOG_HEAD.concat("can't find any database name from remote,will it properties from remote source?"));
 					return;
 				}
 				if (!CollectionUtils.isEmpty(prop.getDatabaseName())) {
@@ -145,7 +147,7 @@ public class DatasourceConfig {
 							return replace.split("\\.")[0];
 						}).collect(Collectors.toSet());
 				if (CollectionUtils.isEmpty(collect)) {
-					log.info(LOG_HEAD.concat("can't find any database name from local properties,will it properties from local source?"));
+					log.info(DynamicSourceConstant.LOG_HEAD.concat("can't find any database name from local properties,will it properties from local source?"));
 					return;
 				}
 				if (!CollectionUtils.isEmpty(prop.getDatabaseName())) {
@@ -202,9 +204,22 @@ public class DatasourceConfig {
 	}
 
 	/**
+	 * session template
+	 *
+	 * @param sqlSessionFactory 工厂
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean(name = "sqlSessionFactory")
+	@ConditionalOnMissingBean
+	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
+		return new SqlSessionTemplate(sqlSessionFactory);
+	}
+
+	/**
 	 * mybatis-plus构建sessionFactory
 	 *
-	 * @param dataSource  数据源
+	 * @param dataSource 数据源
 	 * @param resources  mapper-location
 	 * @return sqlSessionFactory
 	 * @throws Exception

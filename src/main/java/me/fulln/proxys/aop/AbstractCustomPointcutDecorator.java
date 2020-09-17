@@ -1,9 +1,10 @@
-package com.fulln.proxys.aop;
+package me.fulln.proxys.aop;
 
-import com.fulln.proxys.annotation.DataSourceComponent;
-import com.fulln.proxys.dto.CustomAnnotationProperties;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import me.fulln.proxys.annotation.DataSourceComponent;
+import me.fulln.proxys.constant.DynamicSourceConstant;
+import me.fulln.proxys.dto.CustomAnnotationProperties;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.core.MethodClassKey;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -15,8 +16,6 @@ import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.fulln.proxys.constant.DynamicSourceConstant.LOG_HEAD;
-
 @Slf4j
 @Setter
 public abstract class AbstractCustomPointcutDecorator extends StaticMethodMatcherPointcut {
@@ -25,12 +24,7 @@ public abstract class AbstractCustomPointcutDecorator extends StaticMethodMatche
 
 	private CustomAnnotationProperties properties;
 
-	private static final ICustomPointCut NULL_CUSTOM_POINTCUT = new ICustomPointCut() {
-		@Override
-		public String getAnnotationAttr(Class clazz, Method method) {
-			return null;
-		}
-	};
+	private static final ICustomPointCut NULL_CUSTOM_POINTCUT = (clazz, method) -> null;
 
 	/**
 	 * 获取到注解相关信息
@@ -103,14 +97,13 @@ public abstract class AbstractCustomPointcutDecorator extends StaticMethodMatche
 
 		if (AnnotatedElementUtils.hasAnnotation(aClass, DataSourceComponent.class)) {
 			this.attributeCache.put(cacheKey,customPointCut);
-			log.info(LOG_HEAD.concat("get Annotation class [{}] and get Annotation method [{}]: "), aClass.getName(), method.getName());
+			log.info(DynamicSourceConstant.LOG_HEAD.concat("get Annotation class [{}] and get Annotation method [{}]: "), aClass.getName(), method.getName());
 			return true;
 		}
 
-
 		if (AnnotatedElementUtils.hasAnnotation(method, DataSourceComponent.class)) {
 			this.attributeCache.put(cacheKey,customPointCut);
-			log.info(LOG_HEAD.concat("get Annotation class [{}] and get Annotation method [{}]: "), aClass.getName(), method.getName());
+			log.info(DynamicSourceConstant.LOG_HEAD.concat("get Annotation class [{}] and get Annotation method [{}]: "), aClass.getName(), method.getName());
 			return true;
 		}
 

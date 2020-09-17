@@ -1,4 +1,4 @@
-package com.fulln.proxys.annotation;
+package me.fulln.proxys.annotation;
 
 import org.springframework.core.annotation.AliasFor;
 

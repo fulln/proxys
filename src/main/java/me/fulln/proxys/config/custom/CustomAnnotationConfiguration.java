@@ -1,7 +1,7 @@
-package com.fulln.proxys.config.custom;
+package me.fulln.proxys.config.custom;
 
-import com.fulln.proxys.annotation.EnableDynamicSource;
-import com.fulln.proxys.dto.CustomAnnotationProperties;
+import me.fulln.proxys.annotation.EnableDynamicSource;
+import me.fulln.proxys.dto.CustomAnnotationProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * @description 自定义注解的spring启动类，目前只提供operation 等功能实现再考虑template
  * @date Created in  09:54  2020-06-24.
  */
+@Configuration
 @EnableConfigurationProperties(CustomAnnotationProperties.class)
 public class CustomAnnotationConfiguration {
 

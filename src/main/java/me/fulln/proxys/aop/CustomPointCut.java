@@ -1,4 +1,4 @@
-package com.fulln.proxys.aop;
+package me.fulln.proxys.aop;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.fulln.proxys.constant;
+package me.fulln.proxys.constant;
 
 /**
  * @author fulln

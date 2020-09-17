@@ -2,8 +2,8 @@
   "groups": [
     {
       "name": "me.fulln",
-      "type": "com.fulln.proxys.dto.CustomAnnotationProperties",
-      "sourceType": "com.fulln.proxys.dto.CustomAnnotationProperties"
+      "type": "me.fulln.proxys.dto.CustomAnnotationProperties",
+      "sourceType": "me.fulln.proxys.dto.CustomAnnotationProperties"
     }
   ],
   "properties": [
@@ -11,19 +11,19 @@
       "name": "me.fulln.defaultPackageName",
       "type": "java.lang.String",
       "description": "Default dynamic package name",
-      "sourceType": "com.fulln.proxys.dto.CustomAnnotationProperties"
+      "sourceType": "me.fulln.proxys.dto.CustomAnnotationProperties"
     },
     {
       "name": "me.fulln.applicationUrl",
       "type": "java.lang.String",
       "description": "Default dynamic application url",
-      "sourceType": "com.fulln.proxys.dto.CustomAnnotationProperties"
+      "sourceType": "me.fulln.proxys.dto.CustomAnnotationProperties"
     },
     {
       "name": "me.fulln.defaultDatasourceName",
       "type": "java.lang.String",
       "description": "Default dynamic default datasource name",
-      "sourceType": "com.fulln.proxys.dto.CustomAnnotationProperties"
+      "sourceType": "me.fulln.proxys.dto.CustomAnnotationProperties"
     }
   ]
 }

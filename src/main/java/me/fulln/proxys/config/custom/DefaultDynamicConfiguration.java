@@ -1,10 +1,10 @@
-package com.fulln.proxys.config.custom;
+package me.fulln.proxys.config.custom;
 
-import com.fulln.proxys.aop.CustomInterceptor;
-import com.fulln.proxys.aop.CustomPointCut;
-import com.fulln.proxys.aop.CustomPointcutAdvisor;
-import com.fulln.proxys.aop.ICustomPointCut;
-import com.fulln.proxys.dto.CustomAnnotationProperties;
+import me.fulln.proxys.aop.CustomInterceptor;
+import me.fulln.proxys.aop.CustomPointCut;
+import me.fulln.proxys.aop.CustomPointcutAdvisor;
+import me.fulln.proxys.aop.ICustomPointCut;
+import me.fulln.proxys.dto.CustomAnnotationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +14,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
-import static com.fulln.proxys.constant.DynamicSourceConstant.APPLICATION_URL;
-import static com.fulln.proxys.constant.DynamicSourceConstant.DEFAULT_DATASOURCE_NAME;
+import static me.fulln.proxys.constant.DynamicSourceConstant.APPLICATION_URL;
+import static me.fulln.proxys.constant.DynamicSourceConstant.DEFAULT_DATASOURCE_NAME;
 
 /**
  * @author fulln

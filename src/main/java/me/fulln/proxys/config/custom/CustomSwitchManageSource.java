@@ -1,4 +1,4 @@
-package com.fulln.proxys.config.custom;
+package me.fulln.proxys.config.custom;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;

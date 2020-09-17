@@ -1,8 +1,8 @@
-package com.fulln.proxys.config.custom;
+package me.fulln.proxys.config.custom;
 
-import com.fulln.proxys.annotation.EnableDynamicSource;
-import com.fulln.proxys.constant.DynamicSourceConstant;
 import lombok.extern.slf4j.Slf4j;
+import me.fulln.proxys.annotation.EnableDynamicSource;
+import me.fulln.proxys.constant.DynamicSourceConstant;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.AdviceModeImportSelector;
 import org.springframework.context.annotation.AutoProxyRegistrar;

@@ -1,9 +1,9 @@
-package com.fulln.proxys.aop;
+package me.fulln.proxys.aop;
 
-import com.fulln.proxys.constant.DynamicSourceConstant;
-import com.fulln.proxys.dto.CustomAnnotationProperties;
-import com.fulln.proxys.dto.DynamicSourceSwitchProp;
 import lombok.extern.slf4j.Slf4j;
+import me.fulln.proxys.constant.DynamicSourceConstant;
+import me.fulln.proxys.dto.CustomAnnotationProperties;
+import me.fulln.proxys.dto.DynamicSourceSwitchProp;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -16,8 +16,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
 import java.util.List;
-
-import static com.fulln.proxys.constant.DynamicSourceConstant.LOG_HEAD;
 
 /**
  * @author fulln
@@ -87,7 +85,7 @@ public class CustomInterceptorSupport implements BeanFactoryAware, InitializingB
 
 		String defaultDatasourceName = properties.getDefaultDatasourceName();
 
-		log.info(LOG_HEAD.concat("get url [{}] from config properties,let's begin to registered datasource bean"), applicationUrl);
+		log.info(DynamicSourceConstant.LOG_HEAD.concat("get url [{}] from config properties,let's begin to registered datasource bean"), applicationUrl);
 
 		BeanDefinitionBuilder builder =
 				BeanDefinitionBuilder.genericBeanDefinition(DynamicSourceSwitchProp.class)

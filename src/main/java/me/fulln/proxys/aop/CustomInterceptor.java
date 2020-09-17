@@ -1,14 +1,14 @@
-package com.fulln.proxys.aop;
+package me.fulln.proxys.aop;
 
-import com.fulln.proxys.annotation.DataSourceComponent;
 import lombok.extern.slf4j.Slf4j;
+import me.fulln.proxys.annotation.DataSourceComponent;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.StringUtils;
 
-import static com.fulln.proxys.constant.DynamicSourceConstant.LOG_HEAD;
+import static me.fulln.proxys.constant.DynamicSourceConstant.LOG_HEAD;
 
 /**
  * @author fulln
@@ -30,7 +30,7 @@ public class CustomInterceptor extends CustomInterceptorSupport implements Metho
 		if (annotation != null) {
 			//获取注解上的数据源的值的信息
 			String dataSourceKey = annotation.DataSource();
-			//从bean中获取到之前设置的
+			//从bean中获取到之haox 前设置的
 			if (prop == null) {
 				throw new RuntimeException("当前获取到的数据源配置异常!");
 			}

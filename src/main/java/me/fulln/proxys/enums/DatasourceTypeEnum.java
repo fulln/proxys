@@ -1,4 +1,4 @@
-package com.fulln.proxys.enums;
+package me.fulln.proxys.enums;
 
 import lombok.AllArgsConstructor;
 

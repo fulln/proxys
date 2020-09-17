@@ -1,6 +1,6 @@
-package com.fulln.proxys.config;
+package me.fulln.proxys.config;
 
-import com.fulln.proxys.dto.DynamicSourceSwitchProp;
+import me.fulln.proxys.dto.DynamicSourceSwitchProp;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import java.util.HashMap;
